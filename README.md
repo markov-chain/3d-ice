@@ -1,4 +1,4 @@
-# ICE [![Build Status][status-svg]][status-url]
+# ice [![Build Status][status-svg]][status-url]
 
 The package provides an interface to [3D-ICE][1].
 
