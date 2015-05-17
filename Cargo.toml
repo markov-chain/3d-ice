@@ -1,0 +1,9 @@
+[package]
+name = "ice"
+version = "0.0.1"
+authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/stainless-steel/3d-ice"
+homepage = "https://github.com/stainless-steel/3d-ice"
+documentation = "https://stainless-steel.github.io/3d-ice"
+description = "The package provides an interface to 3D-ICE."
