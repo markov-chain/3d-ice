@@ -1,5 +1,5 @@
 [package]
-name = "ice"
+name = "threed-ice"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 license = "MIT"
