@@ -110,6 +110,11 @@ unsafe fn construct(path: &Path) -> Result<Circuit> {
         raise!();
     }
 
+    let cells = get_number_of_cells(stack.Dimensions);
+    let columns = get_number_of_columns(stack.Dimensions);
+    let layers = get_number_of_layers(stack.Dimensions);
+    let rows = get_number_of_rows(stack.Dimensions);
+
     let capacitance = match extract_capacitance(&mut stack) {
         Ok(capacitance) => capacitance,
         Err(error) => {
@@ -126,17 +131,16 @@ unsafe fn construct(path: &Path) -> Result<Circuit> {
         },
     };
 
-    let circuit = Circuit{
-        layers: get_number_of_layers(stack.Dimensions) as usize,
-        rows: get_number_of_rows(stack.Dimensions) as usize,
-        columns: get_number_of_columns(stack.Dimensions) as usize,
-        cells: get_number_of_cells(stack.Dimensions) as usize,
+    cleanup();
+
+    Ok(Circuit{
+        layers: layers as usize,
+        rows: rows as usize,
+        columns: columns as usize,
+        cells: cells as usize,
         capacitance: capacitance,
         conductance: conductance,
-    };
-
-    cleanup();
-    Ok(circuit)
+    })
 }
 
 unsafe fn extract_capacitance(stack: &mut StackDescription_t) -> Result<Vec<f64>> {
