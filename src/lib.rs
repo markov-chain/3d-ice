@@ -1,7 +1,7 @@
 extern crate threed_ice_sys as raw;
 
 use raw::*;
-use std::{fs, iter, mem, ptr};
+use std::{fs, mem};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
@@ -202,16 +202,17 @@ unsafe fn extract_conductance(stack: &mut StackDescription_t,
     let dimension = cells as usize;
     let nonzeros = connections as usize;
 
-    let mut values = iter::repeat(0.0).take(nonzeros).collect::<Vec<f64>>();
-    let mut row_indices = iter::repeat(0).take(nonzeros).collect::<Vec<usize>>();
-    let mut column_offsets = iter::repeat(0).take(dimension + 1).collect::<Vec<usize>>();
+    let mut values = Vec::with_capacity(nonzeros);
+    let mut row_indices = Vec::with_capacity(nonzeros);
+    let mut column_offsets = Vec::with_capacity(dimension + 1);
 
-    ptr::copy_nonoverlapping(matrix.Values as *const _,
-                             values.as_mut_ptr(), nonzeros);
-    ptr::copy_nonoverlapping(matrix.RowIndices as *const _,
-                             row_indices.as_mut_ptr(), nonzeros);
-    ptr::copy_nonoverlapping(matrix.ColumnPointers as *const _,
-                             column_offsets.as_mut_ptr(), dimension + 1);
+    for i in 0..nonzeros {
+        values.push(*matrix.Values.offset(i as isize));
+        row_indices.push(*matrix.RowIndices.offset(i as isize) as usize);
+    }
+    for i in 0..(dimension + 1) {
+        column_offsets.push(*matrix.ColumnPointers.offset(i as isize) as usize);
+    }
 
     thermal_grid_destroy(&mut grid);
     system_matrix_destroy(&mut matrix);
