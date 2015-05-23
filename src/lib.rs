@@ -1,12 +1,13 @@
 extern crate threed_ice_sys as raw;
 
 use raw::*;
-use std::{fs, mem};
+use std::{fs, iter, mem, ptr};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
 
 /// A thermal RC circuit.
+#[derive(Debug)]
 pub struct Circuit {
     /// The number of layers.
     pub layers: usize,
@@ -25,6 +26,7 @@ pub struct Circuit {
 }
 
 /// A sparse matrix stored in the Harwell–Boeing format.
+#[derive(Debug)]
 pub struct SparseMatrix {
     /// The number of rows.
     pub rows: usize,
@@ -36,9 +38,10 @@ pub struct SparseMatrix {
     pub values: Vec<f64>,
     /// The row indices of the nonzero elements.
     pub row_indices: Vec<usize>,
-    /// The offsets of the columns such that the values and row indices of the ith column are
+    /// The offsets of the columns such that the values and row indices of the `i`th column are
     /// stored starting from `values[j]` and `row_indices[j]`, respectively, where `j =
-    /// column_offsets[i]`.
+    /// column_offsets[i]`. The vector has one additional element, which is always equal to
+    /// `nonzeros`, that is, `column_offsets[columns] = nonzeros`.
     pub column_offsets: Vec<usize>,
 }
 
@@ -163,8 +166,7 @@ unsafe fn extract_capacitance(stack: &mut StackDescription_t) -> Result<Vec<f64>
     for layer in 0..layers {
         for row in 0..rows {
             for column in 0..columns {
-                capacitance.push(get_capacity(&mut grid, stack.Dimensions, layer, row,
-                                              column) as f64);
+                capacitance.push(get_capacity(&mut grid, stack.Dimensions, layer, row, column));
             }
         }
     }
@@ -197,17 +199,27 @@ unsafe fn extract_conductance(stack: &mut StackDescription_t,
     }
     fill_system_matrix(&mut matrix, &mut grid, analysis, stack.Dimensions);
 
-    let values = vec![];
-    let row_indices = vec![];
-    let column_offsets = vec![];
+    let dimension = cells as usize;
+    let nonzeros = connections as usize;
+
+    let mut values = iter::repeat(0.0).take(nonzeros).collect::<Vec<f64>>();
+    let mut row_indices = iter::repeat(0).take(nonzeros).collect::<Vec<usize>>();
+    let mut column_offsets = iter::repeat(0).take(dimension + 1).collect::<Vec<usize>>();
+
+    ptr::copy_nonoverlapping(matrix.Values as *const _,
+                             values.as_mut_ptr(), nonzeros);
+    ptr::copy_nonoverlapping(matrix.RowIndices as *const _,
+                             row_indices.as_mut_ptr(), nonzeros);
+    ptr::copy_nonoverlapping(matrix.ColumnPointers as *const _,
+                             column_offsets.as_mut_ptr(), dimension + 1);
 
     thermal_grid_destroy(&mut grid);
     system_matrix_destroy(&mut matrix);
 
     Ok(SparseMatrix {
-        rows: cells as usize,
-        columns: cells as usize,
-        nonzeros: connections as usize,
+        rows: dimension,
+        columns: dimension,
+        nonzeros: nonzeros,
         values: values,
         row_indices: row_indices,
         column_offsets: column_offsets,
