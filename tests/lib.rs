@@ -1,8 +1,10 @@
 extern crate assert;
 extern crate fixture;
+extern crate matrix;
 extern crate temporary;
 extern crate threed_ice;
 
+use matrix::Sparse;
 use std::path::{Path, PathBuf};
 use temporary::Directory;
 
@@ -29,7 +31,10 @@ fn circuit_new() {
             2.20455e+01, 2.20455e+01, 2.20455e+01, 2.20455e+01,
         ], 1e-15);
 
-        let conductance = &circuit.conductance;
+        let conductance = match circuit.conductance {
+            Sparse::CompressedColumn(ref data) => data,
+            _ => unreachable!(),
+        };
         assert::equal(conductance.rows, 4 * 2 * 2);
         assert::equal(conductance.columns, 4 * 2 * 2);
         assert::equal(conductance.nonzeros, 56);
@@ -54,12 +59,12 @@ fn circuit_new() {
              2.206800548917464e+04, -1.201561884917640e+00,  2.206800548917464e+04,
             -1.201561884917640e+00,  2.206800548917464e+04,
         ], 1e-10);
-        assert::equal(&conductance.row_indices[..], &vec![
+        assert::equal(&conductance.indices[..], &vec![
             0, 1, 2, 4, 0, 1, 3, 5, 0, 2, 3, 6, 1, 2, 3, 7, 0, 4, 5, 6, 8, 1, 4, 5, 7, 9, 2, 4, 6,
             7, 10, 3, 5, 6, 7, 11, 4, 8, 12, 5, 9, 13, 6, 10, 14, 7, 11, 15, 8, 12, 9, 13, 10, 14,
             11, 15,
         ][..]);
-        assert::equal(&conductance.column_offsets[..], &vec![
+        assert::equal(&conductance.offsets[..], &vec![
             0, 4, 8, 12, 16, 21, 26, 31, 36, 39, 42, 45, 48, 50, 52, 54, 56,
         ][..]);
     })

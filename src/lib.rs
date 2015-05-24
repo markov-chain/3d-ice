@@ -1,10 +1,12 @@
 extern crate threed_ice_sys as raw;
+extern crate matrix;
 
 use raw::*;
 use std::{fs, mem};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
+use matrix::{Sparse, CompressedData};
 
 /// A thermal RC circuit.
 #[derive(Debug)]
@@ -22,27 +24,7 @@ pub struct Circuit {
     pub capacitance: Vec<f64>,
     /// The thermal conductance matrix, which is sparse, and, hence, only nonzero elements are
     /// stored.
-    pub conductance: SparseMatrix,
-}
-
-/// A sparse matrix stored in the Harwell–Boeing format.
-#[derive(Debug)]
-pub struct SparseMatrix {
-    /// The number of rows.
-    pub rows: usize,
-    /// The number of columns.
-    pub columns: usize,
-    /// The number of nonzero elements.
-    pub nonzeros: usize,
-    /// The values of the nonzero elements.
-    pub values: Vec<f64>,
-    /// The row indices of the nonzero elements.
-    pub row_indices: Vec<usize>,
-    /// The offsets of the columns such that the values and row indices of the `i`th column are
-    /// stored starting from `values[j]` and `row_indices[j]`, respectively, where `j =
-    /// column_offsets[i]`. The vector has one additional element, which is always equal to
-    /// `nonzeros`, that is, `column_offsets[columns] = nonzeros`.
-    pub column_offsets: Vec<usize>,
+    pub conductance: Sparse,
 }
 
 macro_rules! raise(
@@ -177,7 +159,7 @@ unsafe fn extract_capacitance(stack: &mut StackDescription_t) -> Result<Vec<f64>
 }
 
 unsafe fn extract_conductance(stack: &mut StackDescription_t,
-                              analysis: &mut Analysis_t) -> Result<SparseMatrix> {
+                              analysis: &mut Analysis_t) -> Result<Sparse> {
 
     let mut grid: ThermalGrid_t = mem::uninitialized();
     let mut matrix: SystemMatrix_t = mem::uninitialized();
@@ -203,26 +185,26 @@ unsafe fn extract_conductance(stack: &mut StackDescription_t,
     let nonzeros = connections as usize;
 
     let mut values = Vec::with_capacity(nonzeros);
-    let mut row_indices = Vec::with_capacity(nonzeros);
-    let mut column_offsets = Vec::with_capacity(dimension + 1);
+    let mut indices = Vec::with_capacity(nonzeros);
+    let mut offsets = Vec::with_capacity(dimension + 1);
 
     for i in 0..nonzeros {
         values.push(*matrix.Values.offset(i as isize));
-        row_indices.push(*matrix.RowIndices.offset(i as isize) as usize);
+        indices.push(*matrix.RowIndices.offset(i as isize) as usize);
     }
     for i in 0..(dimension + 1) {
-        column_offsets.push(*matrix.ColumnPointers.offset(i as isize) as usize);
+        offsets.push(*matrix.ColumnPointers.offset(i as isize) as usize);
     }
 
     thermal_grid_destroy(&mut grid);
     system_matrix_destroy(&mut matrix);
 
-    Ok(SparseMatrix {
+    Ok(Sparse::CompressedColumn(CompressedData {
         rows: dimension,
         columns: dimension,
         nonzeros: nonzeros,
         values: values,
-        row_indices: row_indices,
-        column_offsets: column_offsets,
-    })
+        indices: indices,
+        offsets: offsets,
+    }))
 }

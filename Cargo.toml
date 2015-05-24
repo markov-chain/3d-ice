@@ -9,6 +9,7 @@ documentation = "https://stainless-steel.github.io/3d-ice"
 description = "The package provides an interface to 3D-ICE."
 
 [dependencies]
+matrix = "*"
 threed-ice-sys = "*"
 
 [dev-dependencies]
