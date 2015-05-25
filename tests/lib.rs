@@ -1,11 +1,11 @@
 extern crate assert;
 extern crate fixture;
-extern crate matrix;
+extern crate storage;
 extern crate temporary;
 extern crate threed_ice;
 
-use matrix::compressed::Format;
 use std::path::{Path, PathBuf};
+use storage::CompressedFormat;
 use temporary::Directory;
 
 use threed_ice::Circuit;
@@ -35,7 +35,7 @@ fn circuit_new() {
         assert::equal(conductance.rows, 4 * 2 * 2);
         assert::equal(conductance.columns, 4 * 2 * 2);
         assert::equal(conductance.nonzeros, 56);
-        assert::equal(conductance.format, Format::Column);
+        assert::equal(conductance.format, CompressedFormat::Column);
         assert::within(&conductance.data, &vec![
              2.080000000000000e+00, -1.500000000000000e-02, -1.500000000000000e-02,
             -1.000000000000000e+00, -1.500000000000000e-02,  2.080000000000000e+00,
