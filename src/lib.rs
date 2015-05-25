@@ -118,7 +118,7 @@ unsafe fn construct(path: &Path) -> Result<Circuit> {
 
     cleanup();
 
-    Ok(Circuit{
+    Ok(Circuit {
         layers: layers as usize,
         rows: rows as usize,
         columns: columns as usize,
