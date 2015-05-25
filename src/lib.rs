@@ -6,7 +6,7 @@ use std::{fs, mem};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
-use matrix::{SparseMatrix, SparseData, CompressedData};
+use matrix::compressed::{Matrix, Format};
 
 /// A thermal RC circuit.
 #[derive(Debug)]
@@ -24,7 +24,7 @@ pub struct Circuit {
     pub capacitance: Vec<f64>,
     /// The thermal conductance matrix, which is sparse, and, hence, only nonzero elements are
     /// stored.
-    pub conductance: SparseMatrix,
+    pub conductance: Matrix<f64>,
 }
 
 macro_rules! raise(
@@ -159,7 +159,7 @@ unsafe fn extract_capacitance(stack: &mut StackDescription_t) -> Result<Vec<f64>
 }
 
 unsafe fn extract_conductance(stack: &mut StackDescription_t,
-                              analysis: &mut Analysis_t) -> Result<SparseMatrix> {
+                              analysis: &mut Analysis_t) -> Result<Matrix<f64>> {
 
     let mut grid: ThermalGrid_t = mem::uninitialized();
     let mut matrix: SystemMatrix_t = mem::uninitialized();
@@ -199,14 +199,13 @@ unsafe fn extract_conductance(stack: &mut StackDescription_t,
     thermal_grid_destroy(&mut grid);
     system_matrix_destroy(&mut matrix);
 
-    Ok(SparseMatrix {
+    Ok(Matrix {
         rows: dimension,
         columns: dimension,
         nonzeros: nonzeros,
-        data: SparseData::CompressedColumn(CompressedData {
-            values: values,
-            indices: indices,
-            offsets: offsets,
-        }),
+        format: Format::Column,
+        data: values,
+        indices: indices,
+        offsets: offsets,
     })
 }
