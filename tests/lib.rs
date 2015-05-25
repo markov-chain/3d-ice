@@ -1,11 +1,11 @@
 extern crate assert;
 extern crate fixture;
-extern crate storage;
+extern crate matrix;
 extern crate temporary;
 extern crate threed_ice;
 
+use matrix::CompressedFormat;
 use std::path::{Path, PathBuf};
-use storage::CompressedFormat;
 use temporary::Directory;
 
 use threed_ice::Circuit;

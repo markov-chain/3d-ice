@@ -1,12 +1,12 @@
-extern crate threed_ice_sys as raw;
-extern crate storage;
+extern crate matrix;
+extern crate threed_ice_sys;
 
-use raw::*;
+use matrix::{CompressedMatrix, CompressedFormat};
 use std::{fs, mem};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
-use storage::{CompressedMatrix, CompressedFormat};
+use threed_ice_sys::*;
 
 /// A thermal RC circuit.
 #[derive(Debug)]
@@ -52,7 +52,7 @@ macro_rules! some(
 );
 
 macro_rules! failed(
-    ($result:expr) => ($result != raw::TDICE_SUCCESS);
+    ($result:expr) => ($result != threed_ice_sys::TDICE_SUCCESS);
 );
 
 macro_rules! str_to_c_str(
