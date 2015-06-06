@@ -1,4 +1,4 @@
-# 3D-ICE [![Build Status][status-img]][status-url]
+# 3D-ICE [![Version][version-img]][version-url] [![Status][status-img]][status-url]
 
 The package provides an interface to [3D-ICE][1].
 
@@ -12,6 +12,8 @@ The package provides an interface to [3D-ICE][1].
 
 [1]: http://esl.epfl.ch/3D-ICE
 
-[doc]: https://stainless-steel.github.io/3d-ice
+[version-img]: https://img.shields.io/crates/v/3d-ice.svg
+[version-url]: https://crates.io/crates/3d-ice
 [status-img]: https://travis-ci.org/stainless-steel/3d-ice.svg?branch=master
 [status-url]: https://travis-ci.org/stainless-steel/3d-ice
+[doc]: https://stainless-steel.github.io/3d-ice
