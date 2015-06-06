@@ -24,8 +24,7 @@ fn circuit_new() {
         assert::equal(circuit.columns, 2);
         assert::equal(circuit.cells, 4 * 2 * 2);
 
-        let capacitance = &circuit.capacitance;
-        assert::within(&capacitance, &vec![
+        assert::within(&circuit.capacitance, &vec![
             1.05000e-03, 1.05000e-03, 1.05000e-03, 1.05000e-03, 3.20000e-04, 3.20000e-04,
             3.20000e-04, 3.20000e-04, 7.98750e-01, 7.98750e-01, 7.98750e-01, 7.98750e-01,
             2.20455e+01, 2.20455e+01, 2.20455e+01, 2.20455e+01,
@@ -78,7 +77,7 @@ fn setup<F>(name: Option<&str>, mut code: F) where F: FnMut(&Path) {
 
 fn find(name: &str) -> PathBuf {
     let path = PathBuf::from("tests/fixtures").join(name);
-    match fixture::find::with_extension(&path, "stk") {
+    match fixture::find::first_with_extension(&path, "stk") {
         Some(path) => path,
         None => panic!("cannot find a stack description in {:?}", path),
     }
