@@ -14,6 +14,6 @@ The package provides an interface to [3D-ICE][1].
 
 [version-img]: https://img.shields.io/crates/v/threed-ice.svg
 [version-url]: https://crates.io/crates/threed-ice
-[status-img]: https://travis-ci.org/stainless-steel/3d-ice.svg?branch=master
-[status-url]: https://travis-ci.org/stainless-steel/3d-ice
-[doc]: https://stainless-steel.github.io/3d-ice
+[status-img]: https://travis-ci.org/simulated-reality/3d-ice.svg?branch=master
+[status-url]: https://travis-ci.org/simulated-reality/3d-ice
+[doc]: https://simulated-reality.github.io/3d-ice
