@@ -1,7 +1,6 @@
 extern crate matrix;
 extern crate threed_ice_sys;
 
-use matrix::{CompressedMatrix, CompressedFormat};
 use std::{fs, mem};
 use std::ffi::CString;
 use std::io::{Error, ErrorKind, Result};
@@ -24,7 +23,7 @@ pub struct Circuit {
     pub capacitance: Vec<f64>,
     /// The thermal conductance matrix, which is sparse, and, hence, only nonzero elements are
     /// stored.
-    pub conductance: CompressedMatrix<f64>,
+    pub conductance: matrix::Compressed<f64>,
 }
 
 macro_rules! raise(
@@ -159,7 +158,7 @@ unsafe fn extract_capacitance(stack: &mut StackDescription_t) -> Result<Vec<f64>
 }
 
 unsafe fn extract_conductance(stack: &mut StackDescription_t,
-                              analysis: &mut Analysis_t) -> Result<CompressedMatrix<f64>> {
+                              analysis: &mut Analysis_t) -> Result<matrix::Compressed<f64>> {
 
     let mut grid: ThermalGrid_t = mem::uninitialized();
     let mut matrix: SystemMatrix_t = mem::uninitialized();
@@ -199,11 +198,11 @@ unsafe fn extract_conductance(stack: &mut StackDescription_t,
     thermal_grid_destroy(&mut grid);
     system_matrix_destroy(&mut matrix);
 
-    Ok(CompressedMatrix {
+    Ok(matrix::Compressed {
         rows: dimension,
         columns: dimension,
         nonzeros: nonzeros,
-        format: CompressedFormat::Column,
+        format: matrix::CompressedFormat::Column,
         data: values,
         indices: indices,
         offsets: offsets,
