@@ -15,11 +15,11 @@ pub struct Circuit {
     pub columns: usize,
     /// The number of cells, which is `layers × rows × columns`.
     pub cells: usize,
-    /// The thermal capacitance matrix, which is diagonal, and, hence, only diagonal elements are
-    /// stored.
+    /// The thermal capacitance matrix, which is diagonal, and, hence, only
+    /// diagonal elements are stored.
     pub capacitance: Vec<f64>,
-    /// The thermal conductance matrix, which is sparse, and, hence, only nonzero elements are
-    /// stored.
+    /// The thermal conductance matrix, which is sparse, and, hence, only
+    /// nonzero elements are stored.
     pub conductance: matrix::Compressed<f64>,
 }
 
