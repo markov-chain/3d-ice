@@ -46,16 +46,16 @@ impl System {
     ///
     /// The matrix is diagonal, and, hence, only diagonal elements are stored.
     #[inline]
-    pub fn capacitance(&mut self) -> Result<Vec<f64>> {
-        unsafe { extract_capacitance(&mut self.stack) }
+    pub fn capacitance(&self) -> Result<Vec<f64>> {
+        unsafe { extract_capacitance(&self.stack) }
     }
 
     /// Extract the thermal conductance matrix.
     ///
     /// The matrix is sparse, and, hence, only nonzero elements are stored.
     #[inline]
-    pub fn conductance(&mut self) -> Result<Compressed<f64>> {
-        unsafe { extract_conductance(&mut self.stack, &mut self.analysis) }
+    pub fn conductance(&self) -> Result<Compressed<f64>> {
+        unsafe { extract_conductance(&self.stack, &self.analysis) }
     }
 
     /// Extract the stack description.
@@ -99,7 +99,7 @@ impl Drop for System {
     }
 }
 
-unsafe fn extract_capacitance(stack: &mut ffi::StackDescription_t) -> Result<Vec<f64>> {
+unsafe fn extract_capacitance(stack: &ffi::StackDescription_t) -> Result<Vec<f64>> {
     let mut grid: ffi::ThermalGrid_t = mem::uninitialized();
 
     let cells = ffi::get_number_of_cells(stack.Dimensions);
@@ -113,7 +113,8 @@ unsafe fn extract_capacitance(stack: &mut ffi::StackDescription_t) -> Result<Vec
         raise!("failed to build the thermal grid");
     }
 
-    ffi::fill_thermal_grid(&mut grid, &mut stack.StackElements, stack.Dimensions);
+    ffi::fill_thermal_grid(&mut grid, &stack.StackElements as *const _ as *mut _,
+                           stack.Dimensions);
 
     let mut capacitance = Vec::with_capacity(cells as usize);
     for layer in 0..layers {
@@ -130,7 +131,7 @@ unsafe fn extract_capacitance(stack: &mut ffi::StackDescription_t) -> Result<Vec
     Ok(capacitance)
 }
 
-unsafe fn extract_conductance(stack: &mut ffi::StackDescription_t, analysis: &mut ffi::Analysis_t)
+unsafe fn extract_conductance(stack: &ffi::StackDescription_t, analysis: &ffi::Analysis_t)
                               -> Result<Compressed<f64>> {
 
     let mut grid: ffi::ThermalGrid_t = mem::uninitialized();
@@ -144,14 +145,16 @@ unsafe fn extract_conductance(stack: &mut ffi::StackDescription_t, analysis: &mu
     if failed!(ffi::thermal_grid_build(&mut grid, layers)) {
         raise!("failed to build the thermal grid");
     }
-    ffi::fill_thermal_grid(&mut grid, &mut stack.StackElements, stack.Dimensions);
+    ffi::fill_thermal_grid(&mut grid, &stack.StackElements as *const _ as *mut _,
+                           stack.Dimensions);
 
     ffi::system_matrix_init(&mut matrix);
     if failed!(ffi::system_matrix_build(&mut matrix, cells, connections)) {
         ffi::thermal_grid_destroy(&mut grid);
         raise!("failed to build the system matrix");
     }
-    ffi::fill_system_matrix(&mut matrix, &mut grid, analysis, stack.Dimensions);
+    ffi::fill_system_matrix(&mut matrix, &mut grid, analysis as *const _ as *mut _,
+                            stack.Dimensions);
 
     let dimension = cells as usize;
     let nonzeros = connections as usize;
