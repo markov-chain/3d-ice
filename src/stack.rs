@@ -4,10 +4,12 @@ use Result;
 use die::{self, Die};
 
 /// A stack description.
-#[derive(Clone, Debug)]
-pub struct Stack {
+#[derive(Clone)]
+pub struct Stack<'l> {
     /// The list of elements.
     pub elements: Vec<StackElement>,
+
+    raw: &'l ffi::StackDescription_t,
 }
 
 /// A stack element.
@@ -20,10 +22,36 @@ pub enum StackElement {
     HeatSink,
 }
 
-pub unsafe fn new(stack: &ffi::StackDescription_t) -> Result<Stack> {
+impl<'l> Stack<'l> {
+    /// Return the number of layers.
+    #[inline]
+    pub fn layers(&self) -> usize {
+        unsafe { ffi::get_number_of_layers(self.raw.Dimensions) as usize }
+    }
+
+    /// Return the number of rows per layer.
+    #[inline]
+    pub fn rows(&self) -> usize {
+        unsafe { ffi::get_number_of_rows(self.raw.Dimensions) as usize }
+    }
+
+    /// Return the number of columns per layer.
+    #[inline]
+    pub fn columns(&self) -> usize {
+        unsafe { ffi::get_number_of_columns(self.raw.Dimensions) as usize }
+    }
+
+    /// Return the number of cells, which is `layers × rows × columns`.
+    #[inline]
+    pub fn cells(&self) -> usize {
+        unsafe { ffi::get_number_of_cells(self.raw.Dimensions) as usize }
+    }
+}
+
+pub unsafe fn new<'l>(raw: &'l ffi::StackDescription_t) -> Result<Stack<'l>> {
     let mut elements = vec![];
-    let mut cursor = stack.StackElements.First;
-    for _ in 0..stack.StackElements.Size {
+    let mut cursor = raw.StackElements.First;
+    for _ in 0..raw.StackElements.Size {
         assert!(!cursor.is_null());
         let element = &(*cursor).Data;
         match element.Type {
@@ -46,5 +74,5 @@ pub unsafe fn new(stack: &ffi::StackDescription_t) -> Result<Stack> {
         cursor = (*cursor).Next;
     }
 
-    Ok(Stack { elements: elements })
+    Ok(Stack { elements: elements, raw: raw })
 }

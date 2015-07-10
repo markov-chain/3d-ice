@@ -60,32 +60,8 @@ impl System {
 
     /// Extract the stack description.
     #[inline]
-    pub fn stack(&self) -> Result<Stack> {
+    pub fn stack<'l>(&'l self) -> Result<Stack<'l>> {
         unsafe { stack::new(&self.stack) }
-    }
-
-    /// Return the number of layers.
-    #[inline]
-    pub fn layers(&self) -> usize {
-        unsafe { ffi::get_number_of_layers(self.stack.Dimensions) as usize }
-    }
-
-    /// Return the number of rows per layer.
-    #[inline]
-    pub fn rows(&self) -> usize {
-        unsafe { ffi::get_number_of_rows(self.stack.Dimensions) as usize }
-    }
-
-    /// Return the number of columns per layer.
-    #[inline]
-    pub fn columns(&self) -> usize {
-        unsafe { ffi::get_number_of_columns(self.stack.Dimensions) as usize }
-    }
-
-    /// Return the number of cells, which is `layers × rows × columns`.
-    #[inline]
-    pub fn cells(&self) -> usize {
-        unsafe { ffi::get_number_of_cells(self.stack.Dimensions) as usize }
     }
 }
 

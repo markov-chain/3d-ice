@@ -15,18 +15,6 @@ macro_rules! ok(
 );
 
 #[test]
-fn new() {
-    setup(None, |path| {
-        let system = ok!(System::new(path));
-
-        assert_eq!(system.layers(), 4);
-        assert_eq!(system.rows(), 2);
-        assert_eq!(system.columns(), 2);
-        assert_eq!(system.cells(), 4 * 2 * 2);
-    });
-}
-
-#[test]
 fn capacitance() {
     setup(None, |path| {
         let capacitance = ok!(ok!(System::new(path)).capacitance());
@@ -81,7 +69,13 @@ fn conductance() {
 #[test]
 fn stack() {
     setup(None, |path| {
-        let stack = ok!(ok!(System::new(path)).stack());
+        let system = ok!(System::new(path));
+        let stack = ok!(system.stack());
+
+        assert_eq!(stack.layers(), 4);
+        assert_eq!(stack.rows(), 2);
+        assert_eq!(stack.columns(), 2);
+        assert_eq!(stack.cells(), 4 * 2 * 2);
 
         assert_eq!(stack.elements.len(), 2);
         let die = match (&stack.elements[0], &stack.elements[1]) {
