@@ -80,7 +80,6 @@ fn stack_new() {
         assert_eq!(&die.name, "DIE");
 
         let floorplan = &die.floorplan;
-        assert_eq!(floorplan.elements.len(), 4);
         assert_eq!(floorplan.elements.iter().map(|element| &element.name).collect::<Vec<_>>(),
                    &["Core0", "Core1", "Core2", "Core3"]);
     });
