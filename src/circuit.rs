@@ -1,11 +1,11 @@
+use ffi::*;
 use matrix;
 use std::io::Result;
 use std::path::Path;
 use std::{fs, mem};
-use threed_ice_sys::*;
 
-/// A thermal RC circuit.
-#[derive(Debug)]
+/// A thermal circuit.
+#[derive(Clone, Debug)]
 pub struct Circuit {
     /// The number of layers.
     pub layers: usize,
@@ -24,12 +24,13 @@ pub struct Circuit {
 }
 
 impl Circuit {
-    /// Create a thermal RC circuit based on the 3D-ICE model.
-    pub fn new(stack_description: &Path) -> Result<Circuit> {
-        if fs::metadata(stack_description).is_err() {
+    /// Construct a thermal circuit based on a stack description.
+    pub fn new<T: AsRef<Path>>(path: T) -> Result<Circuit> {
+        let path = path.as_ref();
+        if fs::metadata(path).is_err() {
             raise!("the stack description file does not exist");
         }
-        unsafe { construct(stack_description) }
+        unsafe { construct(path) }
     }
 }
 
@@ -50,7 +51,6 @@ unsafe fn construct(path: &Path) -> Result<Circuit> {
 
     if failed!(parse_stack_description_file(path_to_c_str!(path).as_ptr() as *mut _, &mut stack,
                                             &mut analysis, &mut output)) {
-
         cleanup();
         raise!();
     }

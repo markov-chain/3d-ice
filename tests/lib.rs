@@ -8,7 +8,7 @@ use matrix::CompressedFormat;
 use std::path::{Path, PathBuf};
 use temporary::Directory;
 
-use threed_ice::Circuit;
+use threed_ice::{Circuit, Stack, StackElement};
 
 macro_rules! ok(
     ($result:expr) => ($result.unwrap());
@@ -64,7 +64,26 @@ fn circuit_new() {
         assert_eq!(&conductance.offsets[..], &vec![
             0, 4, 8, 12, 16, 21, 26, 31, 36, 39, 42, 45, 48, 50, 52, 54, 56,
         ][..]);
-    })
+    });
+}
+
+#[test]
+fn stack_new() {
+    setup(None, |stack| {
+        let stack = ok!(Stack::new(stack));
+        assert_eq!(stack.elements.len(), 2);
+
+        let die = match (&stack.elements[0], &stack.elements[1]) {
+            (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,
+            _ => unreachable!(),
+        };
+        assert_eq!(&die.name, "DIE");
+
+        let floorplan = &die.floorplan;
+        assert_eq!(floorplan.elements.len(), 4);
+        assert_eq!(floorplan.elements.iter().map(|element| &element.name).collect::<Vec<_>>(),
+                   &["Core0", "Core1", "Core2", "Core3"]);
+    });
 }
 
 fn setup<F>(name: Option<&str>, mut code: F) where F: FnMut(&Path) {

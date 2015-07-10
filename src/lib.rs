@@ -1,5 +1,5 @@
 extern crate matrix;
-extern crate threed_ice_sys;
+extern crate threed_ice_sys as ffi;
 
 macro_rules! raise(
     () => (raise!(Other, "failed to call a 3D-ICE function"));
@@ -28,7 +28,14 @@ macro_rules! some(
 );
 
 macro_rules! failed(
-    ($result:expr) => ($result != ::threed_ice_sys::TDICE_SUCCESS);
+    ($result:expr) => ($result != ::ffi::TDICE_SUCCESS);
+);
+
+macro_rules! c_str_to_string(
+    ($string:expr) => (
+        String::from_utf8_lossy(::std::ffi::CStr::from_ptr($string as *const _).to_bytes())
+               .into_owned()
+    );
 );
 
 macro_rules! str_to_c_str(
@@ -40,5 +47,7 @@ macro_rules! path_to_c_str(
 );
 
 mod circuit;
+mod stack;
 
 pub use circuit::Circuit;
+pub use stack::{Die, Floorplan, FloorplanElement, Stack, StackElement};
