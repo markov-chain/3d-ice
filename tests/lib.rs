@@ -15,9 +15,9 @@ macro_rules! ok(
 );
 
 #[test]
-fn system() {
-    setup(None, |stack| {
-        let system = ok!(System::new(stack));
+fn new() {
+    setup(None, |path| {
+        let system = ok!(System::new(path));
 
         assert_eq!(system.layers(), 4);
         assert_eq!(system.rows(), 2);
@@ -28,8 +28,8 @@ fn system() {
 
 #[test]
 fn capacitance() {
-    setup(None, |stack| {
-        let capacitance = ok!(ok!(System::new(stack)).capacitance());
+    setup(None, |path| {
+        let capacitance = ok!(ok!(System::new(path)).capacitance());
         assert::close(&capacitance, &vec![
             1.05000e-03, 1.05000e-03, 1.05000e-03, 1.05000e-03, 3.20000e-04, 3.20000e-04,
             3.20000e-04, 3.20000e-04, 7.98750e-01, 7.98750e-01, 7.98750e-01, 7.98750e-01,
@@ -40,8 +40,8 @@ fn capacitance() {
 
 #[test]
 fn conductance() {
-    setup(None, |stack| {
-        let conductance = ok!(ok!(System::new(stack)).conductance());
+    setup(None, |path| {
+        let conductance = ok!(ok!(System::new(path)).conductance());
         assert_eq!(conductance.rows, 4 * 2 * 2);
         assert_eq!(conductance.columns, 4 * 2 * 2);
         assert_eq!(conductance.nonzeros, 56);
@@ -80,8 +80,8 @@ fn conductance() {
 
 #[test]
 fn stack() {
-    setup(None, |stack| {
-        let stack = ok!(ok!(System::new(stack)).stack());
+    setup(None, |path| {
+        let stack = ok!(ok!(System::new(path)).stack());
 
         assert_eq!(stack.elements.len(), 2);
         let die = match (&stack.elements[0], &stack.elements[1]) {
