@@ -8,29 +8,40 @@ use matrix::CompressedFormat;
 use std::path::{Path, PathBuf};
 use temporary::Directory;
 
-use threed_ice::{Circuit, Stack, StackElement};
+use threed_ice::{StackElement, System};
 
 macro_rules! ok(
     ($result:expr) => ($result.unwrap());
 );
 
 #[test]
-fn circuit_new() {
+fn system() {
     setup(None, |stack| {
-        let circuit = ok!(Circuit::new(stack));
+        let system = ok!(System::new(stack));
 
-        assert_eq!(circuit.layers, 4);
-        assert_eq!(circuit.rows, 2);
-        assert_eq!(circuit.columns, 2);
-        assert_eq!(circuit.cells, 4 * 2 * 2);
+        assert_eq!(system.layers(), 4);
+        assert_eq!(system.rows(), 2);
+        assert_eq!(system.columns(), 2);
+        assert_eq!(system.cells(), 4 * 2 * 2);
+    });
+}
 
-        assert::close(&circuit.capacitance, &vec![
+#[test]
+fn capacitance() {
+    setup(None, |stack| {
+        let capacitance = ok!(ok!(System::new(stack)).capacitance());
+        assert::close(&capacitance, &vec![
             1.05000e-03, 1.05000e-03, 1.05000e-03, 1.05000e-03, 3.20000e-04, 3.20000e-04,
             3.20000e-04, 3.20000e-04, 7.98750e-01, 7.98750e-01, 7.98750e-01, 7.98750e-01,
             2.20455e+01, 2.20455e+01, 2.20455e+01, 2.20455e+01,
         ], 1e-15);
+    });
+}
 
-        let conductance = &circuit.conductance;
+#[test]
+fn conductance() {
+    setup(None, |stack| {
+        let conductance = ok!(ok!(System::new(stack)).conductance());
         assert_eq!(conductance.rows, 4 * 2 * 2);
         assert_eq!(conductance.columns, 4 * 2 * 2);
         assert_eq!(conductance.nonzeros, 56);
@@ -68,11 +79,11 @@ fn circuit_new() {
 }
 
 #[test]
-fn stack_new() {
+fn stack() {
     setup(None, |stack| {
-        let stack = ok!(Stack::new(stack));
-        assert_eq!(stack.elements.len(), 2);
+        let stack = ok!(ok!(System::new(stack)).stack());
 
+        assert_eq!(stack.elements.len(), 2);
         let die = match (&stack.elements[0], &stack.elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,
             _ => unreachable!(),

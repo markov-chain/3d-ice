@@ -2,7 +2,6 @@ extern crate matrix;
 extern crate threed_ice_sys as ffi;
 
 macro_rules! raise(
-    () => (raise!(Other, "failed to call a 3D-ICE function"));
     ($message:expr) => (raise!(Other, $message));
     ($kind:ident, $message:expr) => (
         return Err(::std::io::Error::new(::std::io::ErrorKind::$kind, $message))
@@ -46,8 +45,18 @@ macro_rules! path_to_c_str(
     ($path:expr) => (str_to_c_str!(some!($path.to_str())));
 );
 
-mod circuit;
-mod stack;
+/// An error.
+pub type Error = std::io::Error;
 
-pub use circuit::Circuit;
-pub use stack::{Die, Floorplan, FloorplanElement, Stack, StackElement};
+/// A result.
+pub type Result<T> = std::result::Result<T, Error>;
+
+mod die;
+mod floorplan;
+mod stack;
+mod system;
+
+pub use die::Die;
+pub use floorplan::{Floorplan, FloorplanElement};
+pub use stack::{Stack, StackElement};
+pub use system::System;
