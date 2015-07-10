@@ -51,8 +51,10 @@ pub type Error = std::io::Error;
 /// A result.
 pub type Result<T> = std::result::Result<T, Error>;
 
+mod analysis;
 mod die;
 mod floorplan;
+mod output;
 mod stack;
 mod system;
 

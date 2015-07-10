@@ -70,15 +70,16 @@ fn conductance() {
 fn stack() {
     setup(None, |path| {
         let system = ok!(System::new(path));
-        let stack = ok!(system.stack());
+        let stack = system.stack();
 
         assert_eq!(stack.layers(), 4);
         assert_eq!(stack.rows(), 2);
         assert_eq!(stack.columns(), 2);
         assert_eq!(stack.cells(), 4 * 2 * 2);
 
-        assert_eq!(stack.elements.len(), 2);
-        let die = match (&stack.elements[0], &stack.elements[1]) {
+        let elements = ok!(stack.elements());
+        assert_eq!(elements.len(), 2);
+        let die = match (&elements[0], &elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,
             _ => unreachable!(),
         };

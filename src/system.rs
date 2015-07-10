@@ -4,13 +4,15 @@ use std::path::Path;
 use std::{fs, mem};
 
 use Result;
+use analysis::{self, Analysis};
+use output::{self, Output};
 use stack::{self, Stack};
 
 /// A system.
 pub struct System {
-    stack: ffi::StackDescription_t,
-    analysis: ffi::Analysis_t,
-    output: ffi::Output_t,
+    stack: Stack,
+    analysis: Analysis,
+    output: Output,
 }
 
 impl System {
@@ -23,18 +25,15 @@ impl System {
 
         unsafe {
             let mut system = System {
-                stack: mem::uninitialized(),
-                analysis: mem::uninitialized(),
-                output: mem::uninitialized(),
+                stack: try!(stack::new()),
+                analysis: try!(analysis::new()),
+                output: try!(output::new()),
             };
 
-            ffi::stack_description_init(&mut system.stack);
-            ffi::analysis_init(&mut system.analysis);
-            ffi::output_init(&mut system.output);
-
             if failed!(ffi::parse_stack_description_file(path_to_c_str!(path).as_ptr() as *mut _,
-                                                         &mut system.stack, &mut system.analysis,
-                                                         &mut system.output)) {
+                                                         stack::raw_mut(&mut system.stack),
+                                                         analysis::raw_mut(&mut system.analysis),
+                                                         output::raw_mut(&mut system.output))) {
                 raise!("failed to parse the stack-description file");
             }
 
@@ -47,7 +46,7 @@ impl System {
     /// The matrix is diagonal, and, hence, only diagonal elements are stored.
     #[inline]
     pub fn capacitance(&self) -> Result<Vec<f64>> {
-        unsafe { extract_capacitance(&self.stack) }
+        unsafe { extract_capacitance(stack::raw(&self.stack)) }
     }
 
     /// Extract the thermal conductance matrix.
@@ -55,23 +54,13 @@ impl System {
     /// The matrix is sparse, and, hence, only nonzero elements are stored.
     #[inline]
     pub fn conductance(&self) -> Result<Compressed<f64>> {
-        unsafe { extract_conductance(&self.stack, &self.analysis) }
+        unsafe { extract_conductance(stack::raw(&self.stack), analysis::raw(&self.analysis)) }
     }
 
-    /// Extract the stack description.
+    /// Return the stack.
     #[inline]
-    pub fn stack<'l>(&'l self) -> Result<Stack<'l>> {
-        unsafe { stack::new(&self.stack) }
-    }
-}
-
-impl Drop for System {
-    fn drop(&mut self) {
-        unsafe {
-            ffi::stack_description_destroy(&mut self.stack);
-            ffi::analysis_destroy(&mut self.analysis);
-            ffi::output_destroy(&mut self.output);
-        }
+    pub fn stack<'l>(&'l self) -> &'l Stack {
+        &self.stack
     }
 }
 

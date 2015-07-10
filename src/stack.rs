@@ -1,15 +1,12 @@
 use ffi;
+use std::mem;
 
 use Result;
 use die::{self, Die};
 
-/// A stack description.
-#[derive(Clone)]
-pub struct Stack<'l> {
-    /// The list of elements.
-    pub elements: Vec<StackElement>,
-
-    raw: &'l ffi::StackDescription_t,
+/// A stack.
+pub struct Stack {
+    raw: ffi::StackDescription_t,
 }
 
 /// A stack element.
@@ -22,7 +19,12 @@ pub enum StackElement {
     HeatSink,
 }
 
-impl<'l> Stack<'l> {
+impl Stack {
+    /// Extract the elements.
+    pub fn elements(&self) -> Result<Vec<StackElement>> {
+        unsafe { extract_elements(&self.raw) }
+    }
+
     /// Return the number of layers.
     #[inline]
     pub fn layers(&self) -> usize {
@@ -48,8 +50,31 @@ impl<'l> Stack<'l> {
     }
 }
 
-pub unsafe fn new<'l>(raw: &'l ffi::StackDescription_t) -> Result<Stack<'l>> {
+impl Drop for Stack {
+    fn drop(&mut self) {
+        unsafe { ffi::stack_description_destroy(&mut self.raw) };
+    }
+}
+
+pub unsafe fn new() -> Result<Stack> {
+    let mut raw = mem::uninitialized();
+    ffi::stack_description_init(&mut raw);
+    Ok(Stack { raw: raw })
+}
+
+#[inline(always)]
+pub fn raw<'l>(stack: &'l Stack) -> &'l ffi::StackDescription_t {
+    &stack.raw
+}
+
+#[inline(always)]
+pub fn raw_mut<'l>(stack: &'l mut Stack) -> &'l mut ffi::StackDescription_t {
+    &mut stack.raw
+}
+
+unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackElement>> {
     let mut elements = vec![];
+
     let mut cursor = raw.StackElements.First;
     for _ in 0..raw.StackElements.Size {
         assert!(!cursor.is_null());
@@ -74,5 +99,5 @@ pub unsafe fn new<'l>(raw: &'l ffi::StackDescription_t) -> Result<Stack<'l>> {
         cursor = (*cursor).Next;
     }
 
-    Ok(Stack { elements: elements, raw: raw })
+    Ok(elements)
 }
