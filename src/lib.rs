@@ -26,8 +26,12 @@ macro_rules! some(
     );
 );
 
-macro_rules! failed(
-    ($result:expr) => ($result != ::ffi::TDICE_SUCCESS);
+macro_rules! success(
+    ($result:expr, $message:expr) => (
+        if $result != ::ffi::TDICE_SUCCESS {
+            raise!(concat!("failed to ", $message));
+        }
+    );
 );
 
 macro_rules! c_str_to_string(
@@ -69,7 +73,22 @@ macro_rules! implement_raw(
             }
 
             #[inline(always)]
-            fn raw_mut<'l>(&mut self) -> &mut Self::Target {
+            fn raw_mut(&mut self) -> &mut Self::Target {
+                &mut self.raw
+            }
+        }
+    );
+    ($kind:ident, $target:ty, l) => (
+        impl<'l> ::Raw for $kind<'l> {
+            type Target = $target;
+
+            #[inline(always)]
+            fn raw(&self) -> &Self::Target {
+                &self.raw
+            }
+
+            #[inline(always)]
+            fn raw_mut(&mut self) -> &mut Self::Target {
                 &mut self.raw
             }
         }
@@ -78,12 +97,18 @@ macro_rules! implement_raw(
 
 mod analysis;
 mod die;
+mod dimensions;
 mod floorplan;
 mod output;
+mod power_grid;
 mod stack_description;
 mod system;
+mod system_matrix;
+mod thermal_grid;
 
 pub use die::Die;
+pub use dimensions::Dimensions;
 pub use floorplan::{Floorplan, FloorplanElement};
+pub use power_grid::PowerGrid;
 pub use stack_description::{StackDescription, StackElement};
 pub use system::System;
