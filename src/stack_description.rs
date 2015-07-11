@@ -20,6 +20,24 @@ pub enum StackElement {
 }
 
 impl StackDescription {
+    /// Return the number of cells, which is `layers × rows × columns`.
+    #[inline]
+    pub fn cells(&self) -> usize {
+        unsafe { ffi::get_number_of_cells(self.raw.Dimensions) as usize }
+    }
+
+    /// Return the number of columns per layer.
+    #[inline]
+    pub fn columns(&self) -> usize {
+        unsafe { ffi::get_number_of_columns(self.raw.Dimensions) as usize }
+    }
+
+    /// Return the number of connections.
+    #[inline]
+    pub fn connections(&self) -> usize {
+        unsafe { ffi::get_number_of_connections(self.raw.Dimensions)  as usize }
+    }
+
     /// Extract the elements.
     pub fn elements(&self) -> Result<Vec<StackElement>> {
         unsafe { extract_elements(&self.raw) }
@@ -35,18 +53,6 @@ impl StackDescription {
     #[inline]
     pub fn rows(&self) -> usize {
         unsafe { ffi::get_number_of_rows(self.raw.Dimensions) as usize }
-    }
-
-    /// Return the number of columns per layer.
-    #[inline]
-    pub fn columns(&self) -> usize {
-        unsafe { ffi::get_number_of_columns(self.raw.Dimensions) as usize }
-    }
-
-    /// Return the number of cells, which is `layers × rows × columns`.
-    #[inline]
-    pub fn cells(&self) -> usize {
-        unsafe { ffi::get_number_of_cells(self.raw.Dimensions) as usize }
     }
 }
 
