@@ -8,7 +8,7 @@ use stack_description::StackDescription;
 
 /// A power grid.
 pub struct PowerGrid<'l> {
-    dimensions: Dimensions<'l>,
+    dimensions: &'l Dimensions,
     raw: ffi::PowerGrid_t,
     phantom: PhantomData<&'l ffi::PowerGrid_t>,
 }
@@ -67,8 +67,8 @@ pub unsafe fn new<'l>(description: &'l StackDescription) -> Result<PowerGrid<'l>
     let dimensions = description.dimensions();
 
     let description = description.raw();
-    let layers = ffi::get_number_of_layers(description.Dimensions);
     let cells = ffi::get_number_of_cells(description.Dimensions);
+    let layers = ffi::get_number_of_layers(description.Dimensions);
 
     success!(ffi::power_grid_build(&mut raw, layers, cells), "build the power grid");
     ffi::fill_power_grid(&mut raw, &description.StackElements as *const _ as *mut _);

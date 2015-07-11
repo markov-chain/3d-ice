@@ -10,6 +10,7 @@ use {Raw, Result};
 
 /// A stack description.
 pub struct StackDescription {
+    dimensions: Dimensions,
     raw: ffi::StackDescription_t,
 }
 
@@ -31,8 +32,8 @@ impl StackDescription {
 
     /// Return the dimensions.
     #[inline]
-    pub fn dimensions<'l>(&'l self) -> Dimensions<'l> {
-        unsafe { dimensions::new(&*self.raw.Dimensions) }
+    pub fn dimensions(&self) -> &Dimensions {
+        &self.dimensions
     }
 }
 
@@ -59,7 +60,12 @@ pub unsafe fn new(path: &Path) -> Result<(StackDescription, Analysis, Output)> {
                                                analysis.raw_mut(), output.raw_mut()),
              "parse the stack-description file");
 
-    Ok((StackDescription { raw: raw }, analysis, output))
+    let description = StackDescription {
+        dimensions: dimensions::new(raw.Dimensions),
+        raw: raw,
+    };
+
+    Ok((description, analysis, output))
 }
 
 unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackElement>> {

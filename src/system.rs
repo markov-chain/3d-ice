@@ -57,10 +57,10 @@ unsafe fn extract_capacitance(system: &System) -> Result<Vec<f64>> {
     let grid = grid.raw();
 
     let description = system.description.raw();
+    let cells = ffi::get_number_of_cells(description.Dimensions);
+    let columns = ffi::get_number_of_columns(description.Dimensions);
     let layers = ffi::get_number_of_layers(description.Dimensions);
     let rows = ffi::get_number_of_rows(description.Dimensions);
-    let columns = ffi::get_number_of_columns(description.Dimensions);
-    let cells = ffi::get_number_of_cells(description.Dimensions);
 
     let mut capacitance = Vec::with_capacity(cells as usize);
     for i in 0..layers {
