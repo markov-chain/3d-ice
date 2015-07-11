@@ -3,10 +3,10 @@ use matrix::{Compressed, CompressedFormat};
 use std::path::Path;
 use std::{fs, mem};
 
-use Result;
 use analysis::{self, Analysis};
 use output::{self, Output};
 use stack::{self, Stack};
+use {Raw, Result};
 
 /// A system.
 pub struct System {
@@ -31,9 +31,9 @@ impl System {
             };
 
             if failed!(ffi::parse_stack_description_file(path_to_c_str!(path).as_ptr() as *mut _,
-                                                         stack::raw_mut(&mut system.stack),
-                                                         analysis::raw_mut(&mut system.analysis),
-                                                         output::raw_mut(&mut system.output))) {
+                                                         system.stack.raw_mut(),
+                                                         system.analysis.raw_mut(),
+                                                         system.output.raw_mut())) {
                 raise!("failed to parse the stack-description file");
             }
 
@@ -46,7 +46,7 @@ impl System {
     /// The matrix is diagonal, and, hence, only diagonal elements are stored.
     #[inline]
     pub fn capacitance(&self) -> Result<Vec<f64>> {
-        unsafe { extract_capacitance(stack::raw(&self.stack)) }
+        unsafe { extract_capacitance(self.stack.raw()) }
     }
 
     /// Extract the thermal conductance matrix.
@@ -54,12 +54,12 @@ impl System {
     /// The matrix is sparse, and, hence, only nonzero elements are stored.
     #[inline]
     pub fn conductance(&self) -> Result<Compressed<f64>> {
-        unsafe { extract_conductance(stack::raw(&self.stack), analysis::raw(&self.analysis)) }
+        unsafe { extract_conductance(self.stack.raw(), self.analysis.raw()) }
     }
 
-    /// Return the stack.
+    /// Return the stack description.
     #[inline]
-    pub fn stack<'l>(&'l self) -> &'l Stack {
+    pub fn stack(&self) -> &Stack {
         &self.stack
     }
 }

@@ -13,13 +13,10 @@ impl Drop for Output {
     }
 }
 
+implement_raw!(Output, ffi::Output_t);
+
 pub unsafe fn new() -> Result<Output> {
     let mut raw = mem::uninitialized();
     ffi::output_init(&mut raw);
     Ok(Output { raw: raw })
-}
-
-#[inline(always)]
-pub fn raw_mut<'l>(output: &'l mut Output) -> &'l mut ffi::Output_t {
-    &mut output.raw
 }

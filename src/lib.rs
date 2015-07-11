@@ -51,6 +51,31 @@ pub type Error = std::io::Error;
 /// A result.
 pub type Result<T> = std::result::Result<T, Error>;
 
+trait Raw {
+    type Target;
+
+    fn raw(&self) -> &Self::Target;
+    fn raw_mut(&mut self) -> &mut Self::Target;
+}
+
+macro_rules! implement_raw(
+    ($kind:ty, $target:ty) => (
+        impl ::Raw for $kind {
+            type Target = $target;
+
+            #[inline(always)]
+            fn raw(&self) -> &Self::Target {
+                &self.raw
+            }
+
+            #[inline(always)]
+            fn raw_mut<'l>(&mut self) -> &mut Self::Target {
+                &mut self.raw
+            }
+        }
+    );
+);
+
 mod analysis;
 mod die;
 mod floorplan;

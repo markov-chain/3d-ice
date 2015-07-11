@@ -56,20 +56,12 @@ impl Drop for Stack {
     }
 }
 
+implement_raw!(Stack, ffi::StackDescription_t);
+
 pub unsafe fn new() -> Result<Stack> {
     let mut raw = mem::uninitialized();
     ffi::stack_description_init(&mut raw);
     Ok(Stack { raw: raw })
-}
-
-#[inline(always)]
-pub fn raw<'l>(stack: &'l Stack) -> &'l ffi::StackDescription_t {
-    &stack.raw
-}
-
-#[inline(always)]
-pub fn raw_mut<'l>(stack: &'l mut Stack) -> &'l mut ffi::StackDescription_t {
-    &mut stack.raw
 }
 
 unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackElement>> {
