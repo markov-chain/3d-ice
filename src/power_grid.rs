@@ -14,18 +14,21 @@ pub struct PowerGrid<'l> {
 }
 
 impl<'l> PowerGrid<'l> {
-    pub fn distribute(&self, from: &[f64], into: &mut [f64]) -> Result<()> {
-        use std::ptr::write_bytes;
-
+    /// Map the power dissipation of the processing elements onto the thermal
+    /// nodes.
+    ///
+    /// The size of `from` should be equal to the total number of elements in
+    /// the floorplans of the source layers. The size of `onto` should be equal
+    /// to the the total number of cells in the stack, which is `layers × rows ×
+    /// columns`.
+    pub fn distribute(&self, from: &[f64], onto: &mut [f64]) -> Result<()> {
         let layers = self.dimensions.layers();
         let cells = self.dimensions.rows() * self.dimensions.columns();
-        if into.len() != layers * cells {
+        if onto.len() != layers * cells {
             raise!("the size of the output buffer is invalid");
         }
 
         unsafe {
-            write_bytes(into.as_mut_ptr(), 0, into.len());
-
             let (mut i, mut j) = (0, 0);
             for k in 0..layers {
                 match *self.raw.LayersProfile.offset(k as isize) {
@@ -35,7 +38,7 @@ impl<'l> PowerGrid<'l> {
 
                         ffi::floorplan_matrix_multiply(
                             &floorplan.SurfaceCoefficients as *const _ as *mut _,
-                            &mut into[i..(i + cells)] as *const _ as *mut _,
+                            &mut onto[i..(i + cells)] as *const _ as *mut _,
                             &from[j..(j + elements)] as *const _ as *mut _);
 
                         j += elements;

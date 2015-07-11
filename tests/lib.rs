@@ -67,6 +67,32 @@ fn conductance() {
 }
 
 #[test]
+fn power_grid() {
+    setup(Some("double"), |path| {
+        let system = ok!(System::new(path));
+        let grid = ok!(system.power_grid());
+
+        let mut output = vec![0.0; 4 * 4 * 4];
+        grid.distribute(&[1.0, 2.0, 3.0, 4.0], &mut output).unwrap();
+        assert_eq!(&output[..(4 * 4)], &[
+            0.25, 0.25, 0.50, 0.50,
+            0.25, 0.25, 0.50, 0.50,
+            0.75, 0.75, 1.00, 1.00,
+            0.75, 0.75, 1.00, 1.00,
+        ]);
+
+        let mut output = vec![0.0; 4 * 4 * 4];
+        grid.distribute(&[5.0, 6.0, 7.0, 8.0], &mut output).unwrap();
+        assert_eq!(&output[..(4 * 4)], &[
+            1.25, 1.25, 1.50, 1.50,
+            1.25, 1.25, 1.50, 1.50,
+            1.75, 1.75, 2.00, 2.00,
+            1.75, 1.75, 2.00, 2.00,
+        ]);
+    });
+}
+
+#[test]
 fn stack_description() {
     setup(None, |path| {
         let system = ok!(System::new(path));
@@ -89,38 +115,6 @@ fn stack_description() {
         let floorplan = &die.floorplan;
         assert_eq!(floorplan.elements.iter().map(|element| &element.name).collect::<Vec<_>>(),
                    &["Core0", "Core1", "Core2", "Core3"]);
-    });
-}
-
-#[test]
-fn power_grid() {
-    setup(Some("double"), |path| {
-        let system = ok!(System::new(path));
-
-        let dimensions = system.stack_description().dimensions();
-        assert_eq!(dimensions.layers(), 4);
-        assert_eq!(dimensions.rows(), 4);
-        assert_eq!(dimensions.columns(), 4);
-        assert_eq!(dimensions.connections(), 256);
-
-        let grid = ok!(system.power_grid());
-        let mut output = vec![0.0; 4 * 4 * 4];
-
-        grid.distribute(&[1.0, 2.0, 3.0, 4.0], &mut output).unwrap();
-        assert_eq!(&output[..(4 * 4)], &[
-            0.25, 0.25, 0.50, 0.50,
-            0.25, 0.25, 0.50, 0.50,
-            0.75, 0.75, 1.00, 1.00,
-            0.75, 0.75, 1.00, 1.00,
-        ]);
-
-        grid.distribute(&[5.0, 6.0, 7.0, 8.0], &mut output).unwrap();
-        assert_eq!(&output[..(4 * 4)], &[
-            1.25, 1.25, 1.50, 1.50,
-            1.25, 1.25, 1.50, 1.50,
-            1.75, 1.75, 2.00, 2.00,
-            1.75, 1.75, 2.00, 2.00,
-        ]);
     });
 }
 
