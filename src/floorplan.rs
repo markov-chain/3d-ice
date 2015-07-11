@@ -16,10 +16,10 @@ pub struct FloorplanElement {
     pub name: String,
 }
 
-pub unsafe fn new(floorplan: &ffi::Floorplan_t) -> Result<Floorplan> {
+pub unsafe fn new(raw: &ffi::Floorplan_t) -> Result<Floorplan> {
     let mut elements = vec![];
-    let mut cursor = floorplan.ElementsList.First;
-    for _ in 0..floorplan.ElementsList.Size {
+    let mut cursor = raw.ElementsList.First;
+    for _ in 0..raw.ElementsList.Size {
         assert!(!cursor.is_null());
         elements.push(try!(new_element(&(*cursor).Data)));
         cursor = (*cursor).Next;
@@ -27,6 +27,6 @@ pub unsafe fn new(floorplan: &ffi::Floorplan_t) -> Result<Floorplan> {
     Ok(Floorplan { elements: elements })
 }
 
-unsafe fn new_element(element: &ffi::FloorplanElement_t) -> Result<FloorplanElement> {
-    Ok(FloorplanElement { name: c_str_to_string!(element.Id) })
+unsafe fn new_element(raw: &ffi::FloorplanElement_t) -> Result<FloorplanElement> {
+    Ok(FloorplanElement { name: c_str_to_string!(raw.Id) })
 }

@@ -67,17 +67,17 @@ fn conductance() {
 }
 
 #[test]
-fn stack() {
+fn stack_description() {
     setup(None, |path| {
         let system = ok!(System::new(path));
-        let stack = system.stack();
+        let description = system.stack_description();
 
-        assert_eq!(stack.layers(), 4);
-        assert_eq!(stack.rows(), 2);
-        assert_eq!(stack.columns(), 2);
-        assert_eq!(stack.cells(), 4 * 2 * 2);
+        assert_eq!(description.layers(), 4);
+        assert_eq!(description.rows(), 2);
+        assert_eq!(description.columns(), 2);
+        assert_eq!(description.cells(), 4 * 2 * 2);
 
-        let elements = ok!(stack.elements());
+        let elements = ok!(description.elements());
         assert_eq!(elements.len(), 2);
         let die = match (&elements[0], &elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,

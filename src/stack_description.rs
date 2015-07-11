@@ -4,8 +4,8 @@ use std::mem;
 use Result;
 use die::{self, Die};
 
-/// A stack.
-pub struct Stack {
+/// A stack description.
+pub struct StackDescription {
     raw: ffi::StackDescription_t,
 }
 
@@ -19,7 +19,7 @@ pub enum StackElement {
     HeatSink,
 }
 
-impl Stack {
+impl StackDescription {
     /// Extract the elements.
     pub fn elements(&self) -> Result<Vec<StackElement>> {
         unsafe { extract_elements(&self.raw) }
@@ -50,18 +50,18 @@ impl Stack {
     }
 }
 
-impl Drop for Stack {
+impl Drop for StackDescription {
     fn drop(&mut self) {
         unsafe { ffi::stack_description_destroy(&mut self.raw) };
     }
 }
 
-implement_raw!(Stack, ffi::StackDescription_t);
+implement_raw!(StackDescription, ffi::StackDescription_t);
 
-pub unsafe fn new() -> Result<Stack> {
+pub unsafe fn new() -> Result<StackDescription> {
     let mut raw = mem::uninitialized();
     ffi::stack_description_init(&mut raw);
-    Ok(Stack { raw: raw })
+    Ok(StackDescription { raw: raw })
 }
 
 unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackElement>> {

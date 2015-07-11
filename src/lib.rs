@@ -80,10 +80,10 @@ mod analysis;
 mod die;
 mod floorplan;
 mod output;
-mod stack;
+mod stack_description;
 mod system;
 
 pub use die::Die;
 pub use floorplan::{Floorplan, FloorplanElement};
-pub use stack::{Stack, StackElement};
+pub use stack_description::{StackDescription, StackElement};
 pub use system::System;

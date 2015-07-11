@@ -12,9 +12,9 @@ pub struct Die {
     pub floorplan: Floorplan,
 }
 
-pub unsafe fn new(die: &ffi::Die_t) -> Result<Die> {
+pub unsafe fn new(raw: &ffi::Die_t) -> Result<Die> {
     Ok(Die {
-        name: c_str_to_string!(die.Id),
-        floorplan: try!(floorplan::new(&die.Floorplan)),
+        name: c_str_to_string!(raw.Id),
+        floorplan: try!(floorplan::new(&raw.Floorplan)),
     })
 }
