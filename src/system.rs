@@ -1,10 +1,8 @@
 use ffi;
 use matrix::Compressed;
-use std::fs;
 use std::path::Path;
 
-use analysis::{self, Analysis};
-use output::{self, Output};
+use analysis:: Analysis;
 use power_grid::{self, PowerGrid};
 use stack_description::{self, StackDescription};
 use {Raw, Result};
@@ -14,29 +12,14 @@ use {system_matrix, thermal_grid};
 pub struct System {
     description: StackDescription,
     analysis: Analysis,
-    #[allow(dead_code)]
-    output: Output,
 }
 
 impl System {
     /// Create a system given a stack description.
     pub fn new<T: AsRef<Path>>(path: T) -> Result<System> {
-        let path = path.as_ref();
-        if fs::metadata(path).is_err() {
-            raise!("the stack-description file does not exist");
-        }
-
         unsafe {
-            let mut description = try!(stack_description::new());
-            let mut analysis = try!(analysis::new());
-            let mut output = try!(output::new());
-
-            success!(ffi::parse_stack_description_file(path_to_c_str!(path).as_ptr() as *mut _,
-                                                       description.raw_mut(), analysis.raw_mut(),
-                                                       output.raw_mut()),
-                     "parse the stack-description file");
-
-            Ok(System { description: description, analysis: analysis, output: output })
+            let (description, analysis, _) = try!(stack_description::new(path.as_ref()));
+            Ok(System { description: description, analysis: analysis })
         }
     }
 
