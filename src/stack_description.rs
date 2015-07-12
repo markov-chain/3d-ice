@@ -26,7 +26,7 @@ pub enum StackElement {
 
 impl StackDescription {
     /// Extract the elements.
-    pub fn elements(&self) -> Result<Vec<StackElement>> {
+    pub fn elements(&self) -> Vec<StackElement> {
         unsafe { extract_elements(&self.raw) }
     }
 
@@ -68,7 +68,7 @@ pub unsafe fn new(path: &Path) -> Result<(StackDescription, Analysis, Output)> {
     Ok((description, analysis, output))
 }
 
-unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackElement>> {
+unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Vec<StackElement> {
     let mut elements = vec![];
 
     let mut cursor = raw.StackElements.First;
@@ -86,7 +86,7 @@ unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackEle
                 elements.push(StackElement::Channel);
             },
             ffi::TDICE_STACK_ELEMENT_DIE => {
-                elements.push(StackElement::Die(try!(die::new(&*element.Pointer.Die()))));
+                elements.push(StackElement::Die(die::new(&*element.Pointer.Die())));
             },
             ffi::TDICE_STACK_ELEMENT_HEATSINK => {
                 elements.push(StackElement::HeatSink);
@@ -95,5 +95,5 @@ unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Result<Vec<StackEle
         cursor = (*cursor).Next;
     }
 
-    Ok(elements)
+    elements
 }

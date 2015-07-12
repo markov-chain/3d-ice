@@ -1,7 +1,5 @@
 use ffi;
 
-use Result;
-
 /// A floorplan.
 #[derive(Clone, Debug)]
 pub struct Floorplan {
@@ -16,17 +14,17 @@ pub struct FloorplanElement {
     pub name: String,
 }
 
-pub unsafe fn new(raw: &ffi::Floorplan_t) -> Result<Floorplan> {
+pub unsafe fn new(raw: &ffi::Floorplan_t) -> Floorplan {
     let mut elements = vec![];
     let mut cursor = raw.ElementsList.First;
     for _ in 0..raw.ElementsList.Size {
         assert!(!cursor.is_null());
-        elements.push(try!(new_element(&(*cursor).Data)));
+        elements.push(new_element(&(*cursor).Data));
         cursor = (*cursor).Next;
     }
-    Ok(Floorplan { elements: elements })
+    Floorplan { elements: elements }
 }
 
-unsafe fn new_element(raw: &ffi::FloorplanElement_t) -> Result<FloorplanElement> {
-    Ok(FloorplanElement { name: c_str_to_string!(raw.Id) })
+unsafe fn new_element(raw: &ffi::FloorplanElement_t) -> FloorplanElement {
+    FloorplanElement { name: c_str_to_string!(raw.Id) }
 }

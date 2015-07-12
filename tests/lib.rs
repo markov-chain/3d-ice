@@ -104,7 +104,7 @@ fn stack_description() {
         assert_eq!(dimensions.columns(), 2);
         assert_eq!(dimensions.connections(), 56);
 
-        let elements = ok!(description.elements());
+        let elements = description.elements();
         assert_eq!(elements.len(), 2);
         let die = match (&elements[0], &elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,

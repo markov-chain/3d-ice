@@ -1,6 +1,5 @@
 use ffi;
 
-use Result;
 use floorplan::{self, Floorplan};
 
 /// A die.
@@ -12,9 +11,9 @@ pub struct Die {
     pub floorplan: Floorplan,
 }
 
-pub unsafe fn new(raw: &ffi::Die_t) -> Result<Die> {
-    Ok(Die {
+pub unsafe fn new(raw: &ffi::Die_t) -> Die {
+    Die {
         name: c_str_to_string!(raw.Id),
-        floorplan: try!(floorplan::new(&raw.Floorplan)),
-    })
+        floorplan: floorplan::new(&raw.Floorplan),
+    }
 }
