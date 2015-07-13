@@ -1,6 +1,6 @@
 [package]
 name = "threed-ice"
-version = "0.7.1"
+version = "0.7.2"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/markov-chain/3d-ice"
@@ -9,7 +9,7 @@ documentation = "https://markov-chain.github.io/3d-ice"
 description = "The package provides an interface to 3D-ICE."
 
 [dependencies]
-matrix = "0.10"
+matrix = "0.11"
 threed-ice-sys = "*"
 
 [dev-dependencies]
