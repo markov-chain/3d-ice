@@ -11,7 +11,7 @@ pub struct Floorplan {
 #[derive(Clone, Debug)]
 pub struct FloorplanElement {
     /// The identifier.
-    pub name: String,
+    pub id: String,
 }
 
 pub unsafe fn new(raw: &ffi::Floorplan_t) -> Floorplan {
@@ -26,5 +26,5 @@ pub unsafe fn new(raw: &ffi::Floorplan_t) -> Floorplan {
 }
 
 unsafe fn new_element(raw: &ffi::FloorplanElement_t) -> FloorplanElement {
-    FloorplanElement { name: c_str_to_string!(raw.Id) }
+    FloorplanElement { id: c_str_to_string!(raw.Id) }
 }

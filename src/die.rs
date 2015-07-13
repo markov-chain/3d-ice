@@ -6,14 +6,14 @@ use floorplan::{self, Floorplan};
 #[derive(Clone, Debug)]
 pub struct Die {
     /// The identifier.
-    pub name: String,
+    pub id: String,
     /// The floorplan.
     pub floorplan: Floorplan,
 }
 
 pub unsafe fn new(raw: &ffi::Die_t) -> Die {
     Die {
-        name: c_str_to_string!(raw.Id),
+        id: c_str_to_string!(raw.Id),
         floorplan: floorplan::new(&raw.Floorplan),
     }
 }

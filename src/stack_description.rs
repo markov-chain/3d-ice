@@ -10,7 +10,11 @@ use {Raw, Result};
 
 /// A stack description.
 pub struct StackDescription {
-    dimensions: Dimensions,
+    /// The dimensions.
+    pub dimensions: Dimensions,
+    /// The list of elements.
+    pub elements: Vec<StackElement>,
+
     raw: ffi::StackDescription_t,
 }
 
@@ -22,19 +26,6 @@ pub enum StackElement {
     Channel,
     Die(Die),
     HeatSink,
-}
-
-impl StackDescription {
-    /// Extract the elements.
-    pub fn elements(&self) -> Vec<StackElement> {
-        unsafe { extract_elements(&self.raw) }
-    }
-
-    /// Return the dimensions.
-    #[inline]
-    pub fn dimensions(&self) -> &Dimensions {
-        &self.dimensions
-    }
 }
 
 impl Drop for StackDescription {
@@ -62,6 +53,7 @@ pub unsafe fn new(path: &Path) -> Result<(StackDescription, Analysis, Output)> {
 
     let description = StackDescription {
         dimensions: dimensions::new(raw.Dimensions),
+        elements: extract_elements(&raw),
         raw: raw,
     };
 

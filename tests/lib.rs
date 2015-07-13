@@ -98,22 +98,20 @@ fn stack_description() {
         let system = ok!(System::new(path));
         let description = system.stack_description();
 
-        let dimensions = description.dimensions();
-        assert_eq!(dimensions.layers(), 4);
-        assert_eq!(dimensions.rows(), 2);
-        assert_eq!(dimensions.columns(), 2);
-        assert_eq!(dimensions.connections(), 56);
+        assert_eq!(description.dimensions.layers(), 4);
+        assert_eq!(description.dimensions.rows(), 2);
+        assert_eq!(description.dimensions.columns(), 2);
+        assert_eq!(description.dimensions.connections(), 56);
 
-        let elements = description.elements();
-        assert_eq!(elements.len(), 2);
-        let die = match (&elements[0], &elements[1]) {
+        assert_eq!(description.elements.len(), 2);
+        let die = match (&description.elements[0], &description.elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,
             _ => unreachable!(),
         };
-        assert_eq!(&die.name, "DIE");
+        assert_eq!(&die.id, "DIE");
 
         let floorplan = &die.floorplan;
-        assert_eq!(floorplan.elements.iter().map(|element| &element.name).collect::<Vec<_>>(),
+        assert_eq!(floorplan.elements.iter().map(|element| &element.id).collect::<Vec<_>>(),
                    &["Core0", "Core1", "Core2", "Core3"]);
     });
 }
