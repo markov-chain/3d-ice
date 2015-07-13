@@ -1,5 +1,5 @@
 use ffi;
-use matrix::Compressed;
+use matrix::{Compressed, Diagonal, Make, Shape};
 use std::path::Path;
 
 use analysis:: Analysis;
@@ -26,16 +26,12 @@ impl System {
     }
 
     /// Extract the thermal capacitance matrix.
-    ///
-    /// The matrix is diagonal, and, hence, only diagonal elements are stored.
     #[inline]
-    pub fn capacitance(&self) -> Result<Vec<f64>> {
+    pub fn capacitance(&self) -> Result<Diagonal<f64>> {
         unsafe { extract_capacitance(self) }
     }
 
     /// Extract the thermal conductance matrix.
-    ///
-    /// The matrix is sparse, and, hence, only nonzero elements are stored.
     #[inline]
     pub fn conductance(&self) -> Result<Compressed<f64>> {
         unsafe { extract_conductance(self) }
@@ -48,7 +44,7 @@ impl System {
     }
 }
 
-unsafe fn extract_capacitance(system: &System) -> Result<Vec<f64>> {
+unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
     let grid = try!(thermal_grid::new(&system.stack));
     let grid = grid.raw();
 
@@ -68,7 +64,7 @@ unsafe fn extract_capacitance(system: &System) -> Result<Vec<f64>> {
         }
     }
 
-    Ok(capacitance)
+    Ok(Diagonal::make(capacitance, Shape::Square(cells as usize)))
 }
 
 unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {

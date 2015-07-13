@@ -18,7 +18,7 @@ macro_rules! ok(
 fn capacitance() {
     setup(None, |path| {
         let capacitance = ok!(ok!(System::new(path)).capacitance());
-        assert::close(&capacitance, &vec![
+        assert::close(&capacitance.data, &vec![
             1.05000e-03, 1.05000e-03, 1.05000e-03, 1.05000e-03, 3.20000e-04, 3.20000e-04,
             3.20000e-04, 3.20000e-04, 7.98750e-01, 7.98750e-01, 7.98750e-01, 7.98750e-01,
             2.20455e+01, 2.20455e+01, 2.20455e+01, 2.20455e+01,
