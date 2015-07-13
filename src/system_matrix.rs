@@ -1,5 +1,6 @@
 use ffi;
-use matrix::{Compressed, CompressedFormat};
+use matrix::Compressed;
+use std::convert::From;
 use std::mem;
 
 use analysis::Analysis;
@@ -20,6 +21,41 @@ impl Drop for SystemMatrix {
 
 implement_raw!(SystemMatrix, ffi::SystemMatrix_t);
 
+impl From<SystemMatrix> for Compressed<f64> {
+    fn from(matrix: SystemMatrix) -> Compressed<f64> {
+        use matrix::CompressedFormat::Column;
+
+        let raw = matrix.raw();
+
+        let size = raw.Size as usize;
+        let nonzeros = raw.NNz as usize;
+
+        let mut values = Vec::with_capacity(nonzeros);
+        let mut indices = Vec::with_capacity(nonzeros);
+        let mut offsets = Vec::with_capacity(size + 1);
+
+        unsafe {
+            for i in 0..(nonzeros as isize) {
+                values.push(*raw.Values.offset(i));
+                indices.push(*raw.RowIndices.offset(i) as usize);
+            }
+            for i in 0..(size as isize + 1) {
+                offsets.push(*raw.ColumnPointers.offset(i) as usize);
+            }
+        }
+
+        Compressed {
+            rows: size,
+            columns: size,
+            nonzeros: nonzeros,
+            format: Column,
+            data: values,
+            indices: indices,
+            offsets: offsets,
+        }
+    }
+}
+
 pub unsafe fn new(description: &StackDescription, analysis: &Analysis, grid: &ThermalGrid)
                   -> Result<SystemMatrix> {
 
@@ -35,33 +71,4 @@ pub unsafe fn new(description: &StackDescription, analysis: &Analysis, grid: &Th
                             analysis.raw() as *const _ as *mut _, description.Dimensions);
 
     Ok(SystemMatrix { raw: raw })
-}
-
-pub unsafe fn convert(matrix: &SystemMatrix) -> Compressed<f64> {
-    let matrix = matrix.raw();
-
-    let size = matrix.Size as usize;
-    let nonzeros = matrix.NNz as usize;
-
-    let mut values = Vec::with_capacity(nonzeros);
-    let mut indices = Vec::with_capacity(nonzeros);
-    let mut offsets = Vec::with_capacity(size + 1);
-
-    for i in 0..(nonzeros as isize) {
-        values.push(*matrix.Values.offset(i));
-        indices.push(*matrix.RowIndices.offset(i) as usize);
-    }
-    for i in 0..(size as isize + 1) {
-        offsets.push(*matrix.ColumnPointers.offset(i) as usize);
-    }
-
-    Compressed {
-        rows: size,
-        columns: size,
-        nonzeros: nonzeros,
-        format: CompressedFormat::Column,
-        data: values,
-        indices: indices,
-        offsets: offsets,
-    }
 }

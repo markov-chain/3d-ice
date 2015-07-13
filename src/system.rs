@@ -78,5 +78,5 @@ unsafe fn extract_capacitance(system: &System) -> Result<Vec<f64>> {
 unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
     let grid = try!(thermal_grid::new(&system.description));
     let matrix = try!(system_matrix::new(&system.description, &system.analysis, &grid));
-    Ok(system_matrix::convert(&matrix))
+    Ok(matrix.into())
 }
