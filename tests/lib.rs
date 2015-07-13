@@ -4,7 +4,7 @@ extern crate matrix;
 extern crate temporary;
 extern crate threed_ice;
 
-use matrix::CompressedFormat;
+use matrix::Major;
 use std::path::{Path, PathBuf};
 use temporary::Directory;
 
@@ -33,7 +33,7 @@ fn conductance() {
         assert_eq!(conductance.rows, 4 * 2 * 2);
         assert_eq!(conductance.columns, 4 * 2 * 2);
         assert_eq!(conductance.nonzeros, 56);
-        assert_eq!(conductance.format, CompressedFormat::Column);
+        assert_eq!(conductance.format, Major::Column);
         assert::close(&conductance.data, &vec![
              2.080000000000000e+00, -1.500000000000000e-02, -1.500000000000000e-02,
             -1.000000000000000e+00, -1.500000000000000e-02,  2.080000000000000e+00,

@@ -1,5 +1,5 @@
 use ffi;
-use matrix::Compressed;
+use matrix::{Compressed, Major};
 use std::convert::From;
 use std::mem;
 
@@ -23,8 +23,6 @@ implement_raw!(SystemMatrix, ffi::SystemMatrix_t);
 
 impl From<SystemMatrix> for Compressed<f64> {
     fn from(matrix: SystemMatrix) -> Compressed<f64> {
-        use matrix::CompressedFormat::Column;
-
         let raw = matrix.raw();
 
         let size = raw.Size as usize;
@@ -48,7 +46,7 @@ impl From<SystemMatrix> for Compressed<f64> {
             rows: size,
             columns: size,
             nonzeros: nonzeros,
-            format: Column,
+            format: Major::Column,
             data: values,
             indices: indices,
             offsets: offsets,
