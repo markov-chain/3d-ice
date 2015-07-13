@@ -40,24 +40,24 @@ pub unsafe fn new(description: &StackDescription, analysis: &Analysis, grid: &Th
 pub unsafe fn convert(matrix: &SystemMatrix) -> Compressed<f64> {
     let matrix = matrix.raw();
 
-    let dimension = matrix.Size as usize;
+    let size = matrix.Size as usize;
     let nonzeros = matrix.NNz as usize;
 
     let mut values = Vec::with_capacity(nonzeros);
     let mut indices = Vec::with_capacity(nonzeros);
-    let mut offsets = Vec::with_capacity(dimension + 1);
+    let mut offsets = Vec::with_capacity(size + 1);
 
-    for i in 0..nonzeros {
-        values.push(*matrix.Values.offset(i as isize));
-        indices.push(*matrix.RowIndices.offset(i as isize) as usize);
+    for i in 0..(nonzeros as isize) {
+        values.push(*matrix.Values.offset(i));
+        indices.push(*matrix.RowIndices.offset(i) as usize);
     }
-    for i in 0..(dimension + 1) {
-        offsets.push(*matrix.ColumnPointers.offset(i as isize) as usize);
+    for i in 0..(size as isize + 1) {
+        offsets.push(*matrix.ColumnPointers.offset(i) as usize);
     }
 
     Compressed {
-        rows: dimension,
-        columns: dimension,
+        rows: size,
+        columns: size,
         nonzeros: nonzeros,
         format: CompressedFormat::Column,
         data: values,
