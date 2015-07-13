@@ -10,7 +10,9 @@ use {system_matrix, thermal_grid};
 
 /// A system.
 pub struct System {
-    description: StackDescription,
+    /// The stack description.
+    pub description: StackDescription,
+
     analysis: Analysis,
 }
 
@@ -43,12 +45,6 @@ impl System {
     #[inline]
     pub fn power_grid<'l>(&'l self) -> Result<PowerGrid<'l>> {
         unsafe { power_grid::new(&self.description) }
-    }
-
-    /// Return the stack description.
-    #[inline]
-    pub fn stack_description(&self) -> &StackDescription {
-        &self.description
     }
 }
 
