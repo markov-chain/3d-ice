@@ -2,7 +2,7 @@ use ffi;
 use std::marker::PhantomData;
 use std::mem;
 
-use stack_description::StackDescription;
+use stack::Stack;
 use {Raw, Result};
 
 /// A power grid.
@@ -57,16 +57,16 @@ impl<'l> Drop for PowerGrid<'l> {
 
 implement_raw!(PowerGrid, ffi::PowerGrid_t, l);
 
-pub unsafe fn new<'l>(description: &'l StackDescription) -> Result<PowerGrid<'l>> {
+pub unsafe fn new<'l>(stack: &'l Stack) -> Result<PowerGrid<'l>> {
     let mut raw = mem::uninitialized();
     ffi::power_grid_init(&mut raw);
 
-    let description = description.raw();
-    let cells = ffi::get_number_of_cells(description.Dimensions);
-    let layers = ffi::get_number_of_layers(description.Dimensions);
+    let stack = stack.raw();
+    let cells = ffi::get_number_of_cells(stack.Dimensions);
+    let layers = ffi::get_number_of_layers(stack.Dimensions);
 
     success!(ffi::power_grid_build(&mut raw, layers, cells), "build the power grid");
-    ffi::fill_power_grid(&mut raw, &description.StackElements as *const _ as *mut _);
+    ffi::fill_power_grid(&mut raw, &stack.StackElements as *const _ as *mut _);
 
     Ok(PowerGrid { raw: raw, phantom: PhantomData })
 }

@@ -4,7 +4,7 @@ use std::convert::From;
 use std::mem;
 
 use analysis::Analysis;
-use stack_description::StackDescription;
+use stack::Stack;
 use thermal_grid::ThermalGrid;
 use {Raw, Result};
 
@@ -56,19 +56,17 @@ impl From<SystemMatrix> for Compressed<f64> {
     }
 }
 
-pub unsafe fn new(description: &StackDescription, analysis: &Analysis, grid: &ThermalGrid)
-                  -> Result<SystemMatrix> {
-
+pub unsafe fn new(stack: &Stack, analysis: &Analysis, grid: &ThermalGrid) -> Result<SystemMatrix> {
     let mut raw = mem::uninitialized();
     ffi::system_matrix_init(&mut raw);
 
-    let description = description.raw();
-    let cells = ffi::get_number_of_cells(description.Dimensions);
-    let connections = ffi::get_number_of_connections(description.Dimensions);
+    let stack = stack.raw();
+    let cells = ffi::get_number_of_cells(stack.Dimensions);
+    let connections = ffi::get_number_of_connections(stack.Dimensions);
 
     success!(ffi::system_matrix_build(&mut raw, cells, connections), "build the system matrix");
     ffi::fill_system_matrix(&mut raw, grid.raw() as *const _ as *mut _,
-                            analysis.raw() as *const _ as *mut _, description.Dimensions);
+                            analysis.raw() as *const _ as *mut _, stack.Dimensions);
 
     Ok(SystemMatrix { raw: raw })
 }

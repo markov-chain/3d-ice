@@ -93,18 +93,18 @@ fn power_grid() {
 }
 
 #[test]
-fn stack_description() {
+fn stack() {
     setup(None, |path| {
         let system = ok!(System::new(path));
-        let description = &system.description;
+        let stack = &system.stack;
 
-        let dimensions = &description.dimensions;
+        let dimensions = &stack.dimensions;
         assert_eq!(dimensions.layers(), 4);
         assert_eq!(dimensions.rows(), 2);
         assert_eq!(dimensions.columns(), 2);
         assert_eq!(dimensions.connections(), 56);
 
-        let elements = &description.elements;
+        let elements = &stack.elements;
         assert_eq!(elements.len(), 2);
         let die = match (&elements[0], &elements[1]) {
             (&StackElement::HeatSink, &StackElement::Die(ref die)) => die,

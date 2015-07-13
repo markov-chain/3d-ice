@@ -8,8 +8,8 @@ use dimensions::{self, Dimensions};
 use output::{self, Output};
 use {Raw, Result};
 
-/// A stack description.
-pub struct StackDescription {
+/// A stack.
+pub struct Stack {
     /// The dimensions.
     pub dimensions: Dimensions,
     /// The list of elements.
@@ -28,15 +28,15 @@ pub enum StackElement {
     HeatSink,
 }
 
-impl Drop for StackDescription {
+impl Drop for Stack {
     fn drop(&mut self) {
         unsafe { ffi::stack_description_destroy(&mut self.raw) };
     }
 }
 
-implement_raw!(StackDescription, ffi::StackDescription_t);
+implement_raw!(Stack, ffi::StackDescription_t);
 
-pub unsafe fn new(path: &Path) -> Result<(StackDescription, Analysis, Output)> {
+pub unsafe fn new(path: &Path) -> Result<(Stack, Analysis, Output)> {
     if fs::metadata(path).is_err() {
         raise!("the stack-description file does not exist");
     }
@@ -51,13 +51,13 @@ pub unsafe fn new(path: &Path) -> Result<(StackDescription, Analysis, Output)> {
                                                analysis.raw_mut(), output.raw_mut()),
              "parse the stack-description file");
 
-    let description = StackDescription {
+    let stack = Stack {
         dimensions: dimensions::new(raw.Dimensions),
         elements: extract_elements(&raw),
         raw: raw,
     };
 
-    Ok((description, analysis, output))
+    Ok((stack, analysis, output))
 }
 
 unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Vec<StackElement> {
