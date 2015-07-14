@@ -1,5 +1,6 @@
 use ffi;
 use matrix::{Compressed, Diagonal, Make, Shape};
+use std::mem;
 use std::path::Path;
 
 use analysis:: Analysis;
@@ -68,7 +69,21 @@ unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
 }
 
 unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
+    use superlu::{FromSuperMatrix, SuperMatrix};
+
     let grid = try!(thermal_grid::new(&system.stack));
     let matrix = try!(system_matrix::new(&system.stack, &system.analysis, &grid));
-    Ok(matrix.into())
+
+    let matrix = SuperMatrix::from_raw(matrix.raw().SLUMatrix_A);
+    let result = Compressed::from_super_matrix(&matrix);
+    mem::forget(matrix);
+
+    match result {
+        Some(matrix) => Ok(matrix),
+        _ => raise!("failed to convert the system matrix"),
+    }
+}
+
+unsafe fn extract_distribution(system: &System) -> Result<Compressed<f64>> {
+    try!(power_grid::new(&system.stack)).distribution()
 }

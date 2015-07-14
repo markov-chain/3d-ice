@@ -1,4 +1,5 @@
 extern crate matrix;
+extern crate superlu;
 extern crate threed_ice_sys as ffi;
 
 macro_rules! raise(
