@@ -14,7 +14,7 @@ macro_rules! ok(
 );
 
 #[test]
-fn capacitance() {
+fn system_capacitance() {
     setup(None, |path| {
         let capacitance = ok!(ok!(System::new(path)).capacitance());
         assert::close(&capacitance.values, &vec![
@@ -26,7 +26,7 @@ fn capacitance() {
 }
 
 #[test]
-fn conductance() {
+fn system_conductance() {
     setup(None, |path| {
         let conductance = ok!(ok!(System::new(path)).conductance());
         assert_eq!(conductance.rows, 4 * 2 * 2);
@@ -66,7 +66,7 @@ fn conductance() {
 }
 
 #[test]
-fn power_grid() {
+fn power_grid_distribute() {
     setup(Some("double"), |path| {
         let system = ok!(System::new(path));
         let grid = ok!(system.power_grid());
@@ -92,7 +92,30 @@ fn power_grid() {
 }
 
 #[test]
-fn stack() {
+fn power_grid_distribution() {
+    use matrix::{Dense, Size};
+
+    setup(None, |path| {
+        let system = ok!(System::new(path));
+        let grid = ok!(system.power_grid());
+
+        let distribution = ok!(grid.distribution());
+
+        assert_eq!(distribution.rows(), 4 * 2 * 2);
+        assert_eq!(distribution.columns(), 4);
+
+        let distribution: Vec<_> = Dense::from(&distribution).into();
+        assert_eq!(&distribution, &vec![
+            1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        ]);
+    });
+}
+
+#[test]
+fn system_stack() {
     setup(None, |path| {
         let system = ok!(System::new(path));
         let stack = &system.stack;

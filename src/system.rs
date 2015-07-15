@@ -37,6 +37,12 @@ impl System {
         unsafe { extract_conductance(self) }
     }
 
+    /// Extract the power distribution matrix.
+    #[inline]
+    pub fn distribution(&self) -> Result<Compressed<f64>> {
+        unsafe { extract_distribution(self) }
+    }
+
     /// Construct a power grid.
     #[inline]
     pub fn power_grid<'l>(&'l self) -> Result<PowerGrid<'l>> {
@@ -81,4 +87,8 @@ unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
         Some(matrix) => Ok(matrix),
         _ => raise!("failed to convert the system matrix"),
     }
+}
+
+unsafe fn extract_distribution(system: &System) -> Result<Compressed<f64>> {
+    try!(power_grid::new(&system.stack)).distribution()
 }

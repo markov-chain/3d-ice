@@ -1,5 +1,5 @@
 use ffi;
-use matrix::Compressed;
+use matrix::{Compressed, Matrix, Size};
 use std::marker::PhantomData;
 use std::mem;
 
@@ -50,6 +50,45 @@ impl<'l> PowerGrid<'l> {
         }
 
         Ok(())
+    }
+
+    /// Extract the matrix distributing the power dissipation of the processing
+    /// elements across the thermal nodes.
+    pub fn distribution(&self) -> Result<Compressed<f64>> {
+        use superlu::{FromSuperMatrix, SuperMatrix};
+
+        let (depth, cells) = (self.raw.NLayers as usize, self.raw.NCells as usize);
+
+        let layers = slice!(self.raw.LayersProfile, depth);
+        let floorplans = slice!(self.raw.FloorplansProfile, depth);
+
+        let mut matrix = Compressed::zero((cells, 0));
+        for k in 0..depth {
+            match layers[k] {
+                ffi::TDICE_LAYER_SOURCE | ffi::TDICE_LAYER_SOURCE_CONNECTED_TO_AMBIENT => unsafe {
+                    let floorplan = &*floorplans[k];
+                    let elements = floorplan.NElements as usize;
+
+                    let block = SuperMatrix::from_raw(floorplan.SurfaceCoefficients.SLUMatrix);
+                    let result = Compressed::from_super_matrix(&block);
+                    mem::forget(block);
+
+                    let block = match result {
+                        Some(block) => block,
+                        _ => raise!("failed to convert a floorplan matrix"),
+                    };
+
+                    let (i0, j0) = (k * cells / depth, matrix.columns());
+                    matrix.resize((cells, j0 + elements));
+                    for (i, j, &value) in block.iter() {
+                        matrix.set((i0 + i, j0 + j), value);
+                    }
+                },
+                _ => {},
+            }
+        }
+
+        Ok(matrix)
     }
 }
 
