@@ -9,7 +9,7 @@ documentation = "https://markov-chain.github.io/3d-ice"
 description = "The package provides an interface to 3D-ICE."
 
 [dependencies]
-matrix = "0.12"
+matrix = "0.13"
 superlu = "0.2"
 threed-ice-sys = "*"
 
