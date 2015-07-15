@@ -18,7 +18,7 @@ macro_rules! ok(
 fn capacitance() {
     setup(None, |path| {
         let capacitance = ok!(ok!(System::new(path)).capacitance());
-        assert::close(&capacitance.data, &vec![
+        assert::close(&capacitance.values, &vec![
             1.05000e-03, 1.05000e-03, 1.05000e-03, 1.05000e-03, 3.20000e-04, 3.20000e-04,
             3.20000e-04, 3.20000e-04, 7.98750e-01, 7.98750e-01, 7.98750e-01, 7.98750e-01,
             2.20455e+01, 2.20455e+01, 2.20455e+01, 2.20455e+01,
@@ -34,7 +34,7 @@ fn conductance() {
         assert_eq!(conductance.columns, 4 * 2 * 2);
         assert_eq!(conductance.nonzeros, 56);
         assert_eq!(conductance.format, Major::Column);
-        assert::close(&conductance.data, &vec![
+        assert::close(&conductance.values, &vec![
              2.080000000000000e+00, -1.500000000000000e-02, -1.500000000000000e-02,
             -1.000000000000000e+00, -1.500000000000000e-02,  2.080000000000000e+00,
             -1.500000000000000e-02, -1.000000000000000e+00, -1.500000000000000e-02,

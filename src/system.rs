@@ -1,13 +1,12 @@
 use ffi;
-use matrix::{Compressed, Diagonal, Make, Shape};
+use matrix::{Compressed, Diagonal};
 use std::mem;
 use std::path::Path;
 
 use analysis:: Analysis;
 use power_grid::{self, PowerGrid};
 use stack::{self, Stack};
-use {Raw, Result};
-use {system_matrix, thermal_grid};
+use {Raw, Result, system_matrix, thermal_grid};
 
 /// A system.
 pub struct System {
@@ -50,12 +49,12 @@ unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
     let grid = grid.raw();
 
     let stack = system.stack.raw();
-    let cells = ffi::get_number_of_cells(stack.Dimensions);
+    let cells = ffi::get_number_of_cells(stack.Dimensions) as usize;
     let columns = ffi::get_number_of_columns(stack.Dimensions);
     let layers = ffi::get_number_of_layers(stack.Dimensions);
     let rows = ffi::get_number_of_rows(stack.Dimensions);
 
-    let mut capacitance = Vec::with_capacity(cells as usize);
+    let mut capacitance = Vec::with_capacity(cells);
     for i in 0..layers {
         for j in 0..rows {
             for k in 0..columns {
@@ -65,7 +64,7 @@ unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
         }
     }
 
-    Ok(Diagonal::make(capacitance, Shape::Square(cells as usize)))
+    Ok(Diagonal::from_vec(capacitance, cells))
 }
 
 unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
@@ -82,8 +81,4 @@ unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
         Some(matrix) => Ok(matrix),
         _ => raise!("failed to convert the system matrix"),
     }
-}
-
-unsafe fn extract_distribution(system: &System) -> Result<Compressed<f64>> {
-    try!(power_grid::new(&system.stack)).distribution()
 }

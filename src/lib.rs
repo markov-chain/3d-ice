@@ -50,6 +50,12 @@ macro_rules! path_to_c_str(
     ($path:expr) => (str_to_c_str!(some!($path.to_str())));
 );
 
+macro_rules! slice(
+    ($pointer:expr, $size:expr) => (unsafe {
+        ::std::slice::from_raw_parts($pointer, $size)
+    });
+);
+
 /// An error.
 pub type Error = std::io::Error;
 

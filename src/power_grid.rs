@@ -1,4 +1,5 @@
 use ffi;
+use matrix::Compressed;
 use std::marker::PhantomData;
 use std::mem;
 
@@ -12,39 +13,42 @@ pub struct PowerGrid<'l> {
 }
 
 impl<'l> PowerGrid<'l> {
-    /// Map the power dissipation of the processing elements onto the thermal
-    /// nodes.
+    /// Distribute the power dissipation of the processing elements across the
+    /// thermal nodes.
     ///
     /// The size of `from` should be equal to the total number of elements in
     /// the floorplans of the source layers. The size of `onto` should be equal
     /// to the the total number of cells in the stack, which is `layers × rows ×
     /// columns`.
     pub fn distribute(&self, from: &[f64], onto: &mut [f64]) -> Result<()> {
-        let (layers, cells) = (self.raw.NLayers as usize, self.raw.NCells as usize);
+        let (depth, cells) = (self.raw.NLayers as usize, self.raw.NCells as usize);
         if onto.len() != cells {
             raise!("the size of the output buffer is invalid");
         }
-        unsafe {
-            let cells_per_layer = cells / layers;
-            let (mut i, mut j) = (0, 0);
-            for k in 0..layers {
-                match *self.raw.LayersProfile.offset(k as isize) {
-                    ffi::TDICE_LAYER_SOURCE | ffi::TDICE_LAYER_SOURCE_CONNECTED_TO_AMBIENT => {
-                        let floorplan = &**self.raw.FloorplansProfile.offset(k as isize);
-                        let elements = floorplan.NElements as usize;
 
-                        ffi::floorplan_matrix_multiply(
-                            &floorplan.SurfaceCoefficients as *const _ as *mut _,
-                            &mut onto[i..(i + cells_per_layer)] as *const _ as *mut _,
-                            &from[j..(j + elements)] as *const _ as *mut _);
+        let layers = slice!(self.raw.LayersProfile, depth);
+        let floorplans = slice!(self.raw.FloorplansProfile, depth);
 
-                        j += elements;
-                    },
-                    _ => {},
-                }
-                i += cells_per_layer;
+        let (mut i, mut j) = (0, 0);
+        let cells_per_layer = cells / depth;
+        for k in 0..depth {
+            match layers[k] {
+                ffi::TDICE_LAYER_SOURCE | ffi::TDICE_LAYER_SOURCE_CONNECTED_TO_AMBIENT => unsafe {
+                    let floorplan = &*floorplans[k];
+                    let elements = floorplan.NElements as usize;
+
+                    ffi::floorplan_matrix_multiply(
+                        &floorplan.SurfaceCoefficients as *const _ as *mut _,
+                        &mut onto[i..(i + cells_per_layer)] as *const _ as *mut _,
+                        &from[j..(j + elements)] as *const _ as *mut _);
+
+                    j += elements;
+                },
+                _ => {},
             }
+            i += cells_per_layer;
         }
+
         Ok(())
     }
 }
