@@ -4,7 +4,7 @@ use std::mem;
 use std::path::Path;
 
 use analysis:: Analysis;
-use power_grid::{self, PowerGrid};
+use power_grid;
 use stack::{self, Stack};
 use {Raw, Result, system_matrix, thermal_grid};
 
