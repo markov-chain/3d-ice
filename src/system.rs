@@ -4,9 +4,8 @@ use std::mem;
 use std::path::Path;
 
 use analysis:: Analysis;
-use power_grid;
 use stack::{self, Stack};
-use {Raw, Result, system_matrix, thermal_grid};
+use {Raw, Result, power_grid, system_matrix, thermal_grid};
 
 /// A system.
 pub struct System {
