@@ -116,6 +116,5 @@ mod thermal_grid;
 pub use die::Die;
 pub use dimensions::Dimensions;
 pub use floorplan::{Floorplan, FloorplanElement};
-pub use power_grid::PowerGrid;
 pub use stack::{Stack, StackElement};
 pub use system::System;

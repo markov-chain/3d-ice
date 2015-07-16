@@ -42,12 +42,6 @@ impl System {
     pub fn distribution(&self) -> Result<Compressed<f64>> {
         unsafe { extract_distribution(self) }
     }
-
-    /// Construct a power grid.
-    #[inline]
-    pub fn power_grid<'l>(&'l self) -> Result<PowerGrid<'l>> {
-        unsafe { power_grid::new(&self.stack) }
-    }
 }
 
 unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
