@@ -67,7 +67,7 @@ fn system_conductance() {
 
 #[test]
 fn system_distribution() {
-    use matrix::{Dense, Size};
+    use matrix::{Conventional, Size};
 
     setup(Some("double"), |path| {
         let system = ok!(System::new(path));
@@ -76,7 +76,7 @@ fn system_distribution() {
         assert_eq!(distribution.rows(), 4 * 4 * 4);
         assert_eq!(distribution.columns(), 4);
 
-        let distribution: Vec<_> = Dense::from(&distribution).into();
+        let distribution: Vec<_> = Conventional::from(&distribution).into();
         assert_eq!(&distribution, &vec![
             0.25, 0.25, 0.0, 0.0, 0.25, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             0.00, 0.00, 0.0, 0.0, 0.00, 0.00, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
