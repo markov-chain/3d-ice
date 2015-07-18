@@ -1,5 +1,6 @@
 use ffi;
-use matrix::{Compressed, Matrix, Size};
+use matrix::format::Compressed;
+use matrix::{Matrix, Size};
 use std::marker::PhantomData;
 use std::mem;
 

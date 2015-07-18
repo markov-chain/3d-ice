@@ -1,5 +1,5 @@
 use ffi;
-use matrix::{Compressed, Diagonal};
+use matrix::format::{Compressed, Diagonal};
 use std::mem;
 use std::path::Path;
 
@@ -63,7 +63,7 @@ unsafe fn extract_capacitance(system: &System) -> Result<Diagonal<f64>> {
         }
     }
 
-    Ok(Diagonal::from_vec(capacitance, cells))
+    Ok(Diagonal::from_vec(cells, capacitance))
 }
 
 unsafe fn extract_conductance(system: &System) -> Result<Compressed<f64>> {
