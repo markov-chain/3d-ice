@@ -47,7 +47,7 @@ pub unsafe fn new(path: &Path) -> Result<(Stack, Analysis, Output)> {
     let mut analysis = try!(analysis::new());
     let mut output = try!(output::new());
 
-    success!(ffi::parse_stack_description_file(path_to_c_str!(path).as_ptr() as *mut _, &mut raw,
+    success!(ffi::parse_stack_description_file(path_to_cstr!(path).as_ptr() as *mut _, &mut raw,
                                                analysis.raw_mut(), output.raw_mut()),
              "parse the stack-description file");
 

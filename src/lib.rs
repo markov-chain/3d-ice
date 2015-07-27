@@ -10,29 +10,23 @@ macro_rules! raise(
 );
 
 macro_rules! ok(
-    ($result:expr) => (
-        match $result {
-            Ok(ok) => ok,
-            Err(_) => raise!("something went wrong"),
-        }
-    );
+    ($result:expr) => (match $result {
+        Ok(ok) => ok,
+        _ => raise!("something went wrong"),
+    });
 );
 
 macro_rules! some(
-    ($result:expr) => (
-        match $result {
-            Some(some) => some,
-            None => raise!("something went wrong"),
-        }
-    );
+    ($result:expr) => (match $result {
+        Some(some) => some,
+        _ => raise!("something went wrong"),
+    });
 );
 
 macro_rules! success(
-    ($result:expr, $message:expr) => (
-        if $result != ::ffi::TDICE_SUCCESS {
-            raise!(concat!("failed to ", $message));
-        }
-    );
+    ($result:expr, $message:expr) => (if $result != ::ffi::TDICE_SUCCESS {
+        raise!(concat!("failed to ", $message));
+    });
 );
 
 macro_rules! c_str_to_string(
@@ -42,12 +36,12 @@ macro_rules! c_str_to_string(
     );
 );
 
-macro_rules! str_to_c_str(
+macro_rules! str_to_cstr(
     ($str:expr) => (ok!(::std::ffi::CString::new($str)));
 );
 
-macro_rules! path_to_c_str(
-    ($path:expr) => (str_to_c_str!(some!($path.to_str())));
+macro_rules! path_to_cstr(
+    ($path:expr) => (str_to_cstr!(some!($path.to_str())));
 );
 
 macro_rules! slice(
