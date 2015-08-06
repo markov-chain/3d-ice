@@ -36,5 +36,5 @@ solver:
    initial temperature 318.15;
 
 output:
-   Tmap(DIE1, "tmap.txt", slot);
-   Pmap(DIE1, "pmap.txt", slot);
+   Tmap(DIE1, "T.txt", slot);
+   Pmap(DIE1, "P.txt", slot);
