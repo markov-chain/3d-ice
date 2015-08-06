@@ -21,11 +21,16 @@ pub struct Stack {
 /// A stack element.
 #[derive(Clone, Debug)]
 pub enum StackElement {
-    None,
-    Layer,
+    /// A channel.
     Channel,
+    /// A die.
     Die(Die),
+    /// A heat sink.
     HeatSink,
+    /// A layer.
+    Layer,
+    /// An undefined element.
+    None,
 }
 
 impl Drop for Stack {
@@ -68,12 +73,6 @@ unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Vec<StackElement> {
         assert!(!cursor.is_null());
         let element = &(*cursor).Data;
         match element.Type {
-            ffi::TDICE_STACK_ELEMENT_NONE => {
-                elements.push(StackElement::None);
-            },
-            ffi::TDICE_STACK_ELEMENT_LAYER => {
-                elements.push(StackElement::Layer);
-            },
             ffi::TDICE_STACK_ELEMENT_CHANNEL => {
                 elements.push(StackElement::Channel);
             },
@@ -82,6 +81,12 @@ unsafe fn extract_elements(raw: &ffi::StackDescription_t) -> Vec<StackElement> {
             },
             ffi::TDICE_STACK_ELEMENT_HEATSINK => {
                 elements.push(StackElement::HeatSink);
+            },
+            ffi::TDICE_STACK_ELEMENT_LAYER => {
+                elements.push(StackElement::Layer);
+            },
+            ffi::TDICE_STACK_ELEMENT_NONE => {
+                elements.push(StackElement::None);
             },
         }
         cursor = (*cursor).Next;
