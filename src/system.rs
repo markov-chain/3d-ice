@@ -11,8 +11,8 @@ use {Raw, Result, power_grid, system_matrix, thermal_grid};
 pub struct System {
     /// The stack.
     pub stack: Stack,
-
-    analysis: Analysis,
+    /// The analysis.
+    pub analysis: Analysis,
 }
 
 impl System {

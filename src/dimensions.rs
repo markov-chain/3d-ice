@@ -1,6 +1,6 @@
 use ffi;
 
-/// Dimensions.
+/// The dimensions of a stack.
 pub struct Dimensions {
     raw: *mut ffi::Dimensions_t,
 }

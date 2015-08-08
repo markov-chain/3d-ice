@@ -7,11 +7,19 @@ extern crate threed_ice;
 use std::path::{Path, PathBuf};
 use temporary::Directory;
 
-use threed_ice::{StackElement, System};
+use threed_ice::{AnalysisType, StackElement, System};
 
 macro_rules! ok(
     ($result:expr) => ($result.unwrap());
 );
+
+#[test]
+fn system_analysis() {
+    setup(None, |path| {
+        let system = ok!(System::new(path));
+        assert_eq!(system.analysis.kind(), AnalysisType::Transient);
+    });
+}
 
 #[test]
 fn system_capacitance() {

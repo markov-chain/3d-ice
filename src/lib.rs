@@ -107,6 +107,7 @@ mod system;
 mod system_matrix;
 mod thermal_grid;
 
+pub use analysis::{Analysis, AnalysisType};
 pub use die::Die;
 pub use dimensions::Dimensions;
 pub use floorplan::{Floorplan, FloorplanElement};

@@ -2,7 +2,7 @@ use ffi;
 
 use floorplan::{self, Floorplan};
 
-/// A die.
+/// A die contained in a stack.
 #[derive(Clone, Debug)]
 pub struct Die {
     /// The identifier.

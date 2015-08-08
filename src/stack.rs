@@ -8,7 +8,7 @@ use dimensions::{self, Dimensions};
 use output::{self, Output};
 use {Raw, Result};
 
-/// A stack.
+/// A three-dimensional stack.
 pub struct Stack {
     /// The dimensions.
     pub dimensions: Dimensions,
@@ -18,7 +18,7 @@ pub struct Stack {
     raw: ffi::StackDescription_t,
 }
 
-/// A stack element.
+/// An element of a stack.
 #[derive(Clone, Debug)]
 pub enum StackElement {
     /// A channel.
