@@ -19,7 +19,7 @@ pub struct Stack {
 }
 
 /// An element of a stack.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum StackElement {
     /// A channel.
     Channel,

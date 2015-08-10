@@ -1,14 +1,14 @@
 use ffi;
 
 /// The floorplan of the source layer of a die.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Floorplan {
     /// The list of elements.
     pub elements: Vec<FloorplanElement>,
 }
 
 /// An element of a floorplan.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FloorplanElement {
     /// The identifier.
     pub id: String,
