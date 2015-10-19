@@ -3,7 +3,7 @@ use ffi;
 use floorplan::{self, Floorplan};
 
 /// A die contained in a stack.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Die {
     /// The identifier.
     pub id: String,
