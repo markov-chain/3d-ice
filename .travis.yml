@@ -1,5 +1,9 @@
 language: rust
 sudo: false
+rust:
+  - stable
+  - beta
+  - nightly
 
 addons:
   apt:
@@ -7,11 +11,13 @@ addons:
       - gfortran
 
 after_success:
-  - curl https://markov-chain.github.io/travis/after_success.sh | CRATE_NAME=threed_ice bash
+  - curl https://markov-chain.github.io/travis/after_success.sh | bash
 
 env:
   global:
-    secure: SbVrkTEIRIidUxBUbklpfb31vw11Y0SfRissOU/SMN4GopfplwDTiTuYgp6wiOTPnxniDgAJydNq///FifTbiR906MehoBh+71KB2WAXB+Bf7JIEr7rLECxPGaQl6G9GWyF2GmsBpMvBaM672bk3GrQGN4YonKxqcFWyzvavCeLLfGTn+LnrdTNGegNHhnq1xzWYHEE+KfF63W7Uy9pZrz37H1LGSaGdQ+UPaS6f2MXJcx4YjzH9WqlFIc6exdrfTtRZ5eEvG6Yusq/ZtTybB23l8/IWY13n4G7I7n5UlB6G80VUNnuOxFwZU17pf0dgJlQhp62OJHCshAEuTPz7j+DTl5deIzQptHC2rrgHEHj3LVTRybzmWLxgK1nAI2kAB3rWz4I9nf/TMtu/chC8oAV3ik0GOQgv9K1N1eeUrtLj4jCFSe7mzL91umG9O0DOGbI7MmsbiMz+481e7gqvpE724yFDFr/1rgw126BRQEJEeJ2VFUwOXXBZ+mMVQ/jJTPaqO5A5of3kVbF2ewRwT2lyl5Zl7N6kgriVmvtOfuJlA2yaCz2GfG0EOpg2vUndWqbf/VyPJg+vDiJOKHqdVtLrXFvgFYaD77CldDgpdCugjtZYKLXfwoX/qgN7969UdSONVvG75PrSOBULglCcE2bmcAnSHmo+Qvhc0CjWb9U=
+    - CRATE_NAME=threed_ice
+    - RUSTDOC_VERSION=nightly
+    - secure: SbVrkTEIRIidUxBUbklpfb31vw11Y0SfRissOU/SMN4GopfplwDTiTuYgp6wiOTPnxniDgAJydNq///FifTbiR906MehoBh+71KB2WAXB+Bf7JIEr7rLECxPGaQl6G9GWyF2GmsBpMvBaM672bk3GrQGN4YonKxqcFWyzvavCeLLfGTn+LnrdTNGegNHhnq1xzWYHEE+KfF63W7Uy9pZrz37H1LGSaGdQ+UPaS6f2MXJcx4YjzH9WqlFIc6exdrfTtRZ5eEvG6Yusq/ZtTybB23l8/IWY13n4G7I7n5UlB6G80VUNnuOxFwZU17pf0dgJlQhp62OJHCshAEuTPz7j+DTl5deIzQptHC2rrgHEHj3LVTRybzmWLxgK1nAI2kAB3rWz4I9nf/TMtu/chC8oAV3ik0GOQgv9K1N1eeUrtLj4jCFSe7mzL91umG9O0DOGbI7MmsbiMz+481e7gqvpE724yFDFr/1rgw126BRQEJEeJ2VFUwOXXBZ+mMVQ/jJTPaqO5A5of3kVbF2ewRwT2lyl5Zl7N6kgriVmvtOfuJlA2yaCz2GfG0EOpg2vUndWqbf/VyPJg+vDiJOKHqdVtLrXFvgFYaD77CldDgpdCugjtZYKLXfwoX/qgN7969UdSONVvG75PrSOBULglCcE2bmcAnSHmo+Qvhc0CjWb9U=
 
 notifications:
   email: false
