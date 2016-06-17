@@ -1,7 +1,7 @@
 [package]
 name = "threed-ice"
 version = "0.12.0"
-license = "MIT"
+license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides an interface to 3D-ICE."
 documentation = "https://markov-chain.github.io/3d-ice"

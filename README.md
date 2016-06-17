@@ -4,16 +4,16 @@ The package provides an interface to [3D-ICE][1].
 
 ## [Documentation][doc]
 
-## Contributing
+## Contribution
 
-1. Fork the project.
-2. Implement your idea.
-3. Open a pull request.
+Your contribution is highly appreciated. Do not hesitate to open an issue or a
+pull request. Note that any contribution submitted for inclusion in the project
+will be licensed according to the terms given in [LICENSE.md](LICENSE.md).
 
 [1]: http://esl.epfl.ch/3D-ICE
 
-[version-img]: https://img.shields.io/crates/v/threed-ice.svg
-[version-url]: https://crates.io/crates/threed-ice
+[doc]: https://markov-chain.github.io/3d-ice
 [status-img]: https://travis-ci.org/markov-chain/3d-ice.svg?branch=master
 [status-url]: https://travis-ci.org/markov-chain/3d-ice
-[doc]: https://markov-chain.github.io/3d-ice
+[version-img]: https://img.shields.io/crates/v/threed-ice.svg
+[version-url]: https://crates.io/crates/threed-ice
