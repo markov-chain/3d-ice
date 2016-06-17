@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Compressed` struct in crate `matrix`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Compressed">
+
+    <title>matrix::format::compressed::Compressed - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>matrix</a>::<wbr><a href='../index.html'>format</a>::<wbr><a href='index.html'>compressed</a></p><script>window.sidebarCurrent = {name: 'Compressed', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>matrix</a>::<wbr><a href='../index.html'>format</a>::<wbr><a href='index.html'>compressed</a>::<wbr><a class='struct' href=''>Compressed</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-375' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#18-38' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Compressed&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; {
+    pub rows: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,
+    pub columns: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,
+    pub nonzeros: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>,
+    pub variant: <a class='enum' href='../../../matrix/format/compressed/enum.Variant.html' title='matrix::format::compressed::Variant'>Variant</a>,
+    pub values: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;,
+    pub indices: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;,
+    pub offsets: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;,
+}</pre><div class='docblock'><p>A compressed matrix.</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.rows' class='structfield'><code>rows: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code>
+                           </span><span class='stab '></span><div class='docblock'><p>The number of rows.</p>
+</div><span id='structfield.columns' class='structfield'><code>columns: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code>
+                           </span><span class='stab '></span><div class='docblock'><p>The number of columns.</p>
+</div><span id='structfield.nonzeros' class='structfield'><code>nonzeros: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code>
+                           </span><span class='stab '></span><div class='docblock'><p>The number of nonzero elements.</p>
+</div><span id='structfield.variant' class='structfield'><code>variant: <a class='enum' href='../../../matrix/format/compressed/enum.Variant.html' title='matrix::format::compressed::Variant'>Variant</a></code>
+                           </span><span class='stab '></span><div class='docblock'><p>The format variant.</p>
+</div><span id='structfield.values' class='structfield'><code>values: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;</code>
+                           </span><span class='stab '></span><div class='docblock'><p>The values of the nonzero elements.</p>
+</div><span id='structfield.indices' class='structfield'><code>indices: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;</code>
+                           </span><span class='stab '></span><div class='docblock'><p>The indices of rows when <code>variant = Column</code> or columns when <code>variant = Row</code> of the nonzero elements.</p>
+</div><span id='structfield.offsets' class='structfield'><code>offsets: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt;</code>
+                           </span><span class='stab '></span><div class='docblock'><p>The offsets of columns when <code>variant = Column</code> or rows when <code>variant = Row</code> such that the values and indices of the <code>i</code>th column when <code>variant = Column</code> or the <code>i</code>th row when <code>variant = Row</code> are stored starting from
+<code>values[j]</code> and <code>indices[j]</code>, respectively, where <code>j = offsets[i]</code>. The
+vector has one additional element, which is always equal to <code>nonzeros</code>.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-698' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#88-206' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>&lt;S:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Size.html' title='matrix::prelude::Size'>Size</a>&gt;(size: S, variant: <a class='enum' href='../../../matrix/format/compressed/enum.Variant.html' title='matrix::format::compressed::Variant'>Variant</a>) -&gt; Self</code></h4>
+<div class='docblock'><p>Create a zero matrix.</p>
+</div><h4 id='method.with_capacity' class='method'><code>fn <a href='#method.with_capacity' class='fnname'>with_capacity</a>&lt;S:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Size.html' title='matrix::prelude::Size'>Size</a>&gt;(size: S, variant: <a class='enum' href='../../../matrix/format/compressed/enum.Variant.html' title='matrix::format::compressed::Variant'>Variant</a>, capacity: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; Self</code></h4>
+<div class='docblock'><p>Create a zero matrix with a specific capacity.</p>
+</div><h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>&lt;P:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Position.html' title='matrix::prelude::Position'>Position</a>&gt;(&amp;self, position: P) -&gt; T</code></h4>
+<div class='docblock'><p>Read an element.</p>
+</div><h4 id='method.set' class='method'><code>fn <a href='#method.set' class='fnname'>set</a>&lt;P:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Position.html' title='matrix::prelude::Position'>Position</a>&gt;(&amp;mut self, position: P, value: T)</code></h4>
+<div class='docblock'><p>Assign a value to an element.</p>
+
+<p>Note that the function treats zero values as any other.</p>
+</div><h4 id='method.iter' class='method'><code>fn <a href='#method.iter' class='fnname'>iter</a>&lt;'l&gt;(&amp;'l self) -&gt; <a class='struct' href='../../../matrix/format/compressed/struct.Iterator.html' title='matrix::format::compressed::Iterator'>Iterator</a>&lt;'l,&nbsp;T&gt;</code></h4>
+<div class='docblock'><p>Return a sparse iterator.</p>
+</div><h4 id='method.iter_mut' class='method'><code>fn <a href='#method.iter_mut' class='fnname'>iter_mut</a>&lt;'l&gt;(&amp;'l mut self) -&gt; <a class='struct' href='../../../matrix/format/compressed/struct.IteratorMut.html' title='matrix::format::compressed::IteratorMut'>IteratorMut</a>&lt;'l,&nbsp;T&gt;</code></h4>
+<div class='docblock'><p>Return a sparse iterator allowing mutation.</p>
+</div><h4 id='method.resize' class='method'><code>fn <a href='#method.resize' class='fnname'>resize</a>&lt;S:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Size.html' title='matrix::prelude::Size'>Size</a>&gt;(&amp;mut self, size: S)</code></h4>
+<div class='docblock'><p>Resize the matrix.</p>
+</div><h4 id='method.retain' class='method'><code>fn <a href='#method.retain' class='fnname'>retain</a>&lt;F&gt;(&amp;mut self, condition: F) <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, &amp;T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></code></h4>
+<div class='docblock'><p>Retain the elements that satisfy a condition and discard the rest.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'l,&nbsp;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;&amp;'l <a class='struct' href='../../../matrix/format/conventional/struct.Conventional.html' title='matrix::format::conventional::Conventional'>Conventional</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-448' class='srclink' href='../../../src/matrix/format/compressed/convert.rs.html#5-16' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(conventional: &amp;'l <a class='struct' href='../../../matrix/format/conventional/struct.Conventional.html' title='matrix::format::conventional::Conventional'>Conventional</a>&lt;T&gt;) -&gt; Self</code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../../matrix/format/conventional/struct.Conventional.html' title='matrix::format::conventional::Conventional'>Conventional</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-458' class='srclink' href='../../../src/matrix/format/compressed/convert.rs.html#18-23' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(matrix: <a class='struct' href='../../../matrix/format/conventional/struct.Conventional.html' title='matrix::format::conventional::Conventional'>Conventional</a>&lt;T&gt;) -&gt; Self</code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'l,&nbsp;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;&amp;'l <a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-484' class='srclink' href='../../../src/matrix/format/compressed/convert.rs.html#56-61' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-2' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(matrix: &amp;'l <a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;) -&gt; Self</code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-489' class='srclink' href='../../../src/matrix/format/compressed/convert.rs.html#63-73' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from-3' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(matrix: <a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;) -&gt; Self</code></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../../../matrix/operation/trait.Multiply.html' title='matrix::operation::Multiply'>Multiply</a>&lt;<a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;,&nbsp;<a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a> + <a class='trait' href='../../../matrix/trait.Number.html' title='matrix::Number'>Number</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-507' class='srclink' href='../../../src/matrix/format/compressed/operation.rs.html#5-12' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.multiply' class='method'><code>fn <a href='../../../matrix/operation/trait.Multiply.html#tymethod.multiply' class='fnname'>multiply</a>(&amp;self, right: &amp;<a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;) -&gt; Self</code></h4>
+<div class='docblock'><p>Perform the multiplication.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'l,&nbsp;T&gt; <a class='trait' href='../../../matrix/operation/trait.MultiplyInto.html' title='matrix::operation::MultiplyInto'>MultiplyInto</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>[</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>,&nbsp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>[</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a> + <a class='trait' href='../../../matrix/trait.Number.html' title='matrix::Number'>Number</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-513' class='srclink' href='../../../src/matrix/format/compressed/operation.rs.html#14-21' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.multiply_into' class='method'><code>fn <a href='../../../matrix/operation/trait.MultiplyInto.html#tymethod.multiply_into' class='fnname'>multiply_into</a>(&amp;self, right: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, result: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>)</code></h4>
+<div class='docblock'><p>Perform the multiplication.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class='trait' href='../../../matrix/operation/trait.MultiplySelf.html' title='matrix::operation::MultiplySelf'>MultiplySelf</a>&lt;<a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;&gt; for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a> + <a class='trait' href='../../../matrix/trait.Number.html' title='matrix::Number'>Number</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-533' class='srclink' href='../../../src/matrix/format/compressed/operation.rs.html#33-42' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.multiply_self' class='method'><code>fn <a href='../../../matrix/operation/trait.MultiplySelf.html#tymethod.multiply_self' class='fnname'>multiply_self</a>(&amp;mut self, right: &amp;<a class='struct' href='../../../matrix/format/diagonal/struct.Diagonal.html' title='matrix::format::diagonal::Diagonal'>Diagonal</a>&lt;T&gt;)</code></h4>
+<div class='docblock'><p>Perform the multiplication.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='../../../matrix/operation/trait.Transpose.html' title='matrix::operation::Transpose'>Transpose</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-548' class='srclink' href='../../../src/matrix/format/compressed/operation.rs.html#44-53' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.transpose' class='method'><code>fn <a href='../../../matrix/operation/trait.Transpose.html#tymethod.transpose' class='fnname'>transpose</a>(&amp;self) -&gt; Self</code></h4>
+<div class='docblock'><p>Perform the transpose.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='../../../matrix/prelude/trait.Size.html' title='matrix::prelude::Size'>Size</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-692' class='srclink' href='../../../src/matrix/format/mod.rs.html#26-36' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.rows' class='method'><code>fn <a href='../../../matrix/prelude/trait.Size.html#tymethod.rows' class='fnname'>rows</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>Return the number of rows.</p>
+</div><h4 id='method.columns' class='method'><code>fn <a href='../../../matrix/prelude/trait.Size.html#tymethod.columns' class='fnname'>columns</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>Return the number of columns.</p>
+</div><h4 id='method.dimensions' class='method'><code>fn <a href='../../../matrix/prelude/trait.Size.html#method.dimensions' class='fnname'>dimensions</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></h4>
+<div class='docblock'><p>Return the number of rows and columns.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='../../../matrix/trait.Matrix.html' title='matrix::Matrix'>Matrix</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-755' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#208-219' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Element' class='type'><code>type <a href='../../../matrix/trait.Matrix.html#associatedtype.Element' class='type'>Element</a> = T</code></h4>
+<div class='docblock'><p>The element type.</p>
+</div><h4 id='method.nonzeros' class='method'><code>fn <a href='../../../matrix/trait.Matrix.html#tymethod.nonzeros' class='fnname'>nonzeros</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>Count nonzero elements.</p>
+</div><h4 id='method.zero' class='method'><code>fn <a href='../../../matrix/trait.Matrix.html#tymethod.zero' class='fnname'>zero</a>&lt;S:&nbsp;<a class='trait' href='../../../matrix/prelude/trait.Size.html' title='matrix::prelude::Size'>Size</a>&gt;(size: S) -&gt; Self</code></h4>
+<div class='docblock'><p>Create a zero matrix.</p>
+</div></div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> + <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-384' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#17' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> + <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-420' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#17' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;T:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> + <a class='trait' href='../../../matrix/prelude/trait.Element.html' title='matrix::prelude::Element'>Element</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-433' class='srclink' href='../../../src/matrix/format/compressed/mod.rs.html#17' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../matrix/format/compressed/struct.Compressed.html' title='matrix::format::compressed::Compressed'>Compressed</a>&lt;T&gt;</code></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "matrix";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>
