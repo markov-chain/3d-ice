@@ -1,5 +1,6 @@
 language: rust
 sudo: false
+
 rust:
   - stable
   - beta
@@ -11,13 +12,12 @@ addons:
       - gfortran
 
 after_success:
-  - curl https://markov-chain.github.io/travis/after_success.sh | bash
+  - curl https://markov-chain.github.io/travis/documentation.sh | bash
 
 env:
   global:
     - CRATE_NAME=threed_ice
-    - RUSTDOC_VERSION=nightly
-    - secure: SbVrkTEIRIidUxBUbklpfb31vw11Y0SfRissOU/SMN4GopfplwDTiTuYgp6wiOTPnxniDgAJydNq///FifTbiR906MehoBh+71KB2WAXB+Bf7JIEr7rLECxPGaQl6G9GWyF2GmsBpMvBaM672bk3GrQGN4YonKxqcFWyzvavCeLLfGTn+LnrdTNGegNHhnq1xzWYHEE+KfF63W7Uy9pZrz37H1LGSaGdQ+UPaS6f2MXJcx4YjzH9WqlFIc6exdrfTtRZ5eEvG6Yusq/ZtTybB23l8/IWY13n4G7I7n5UlB6G80VUNnuOxFwZU17pf0dgJlQhp62OJHCshAEuTPz7j+DTl5deIzQptHC2rrgHEHj3LVTRybzmWLxgK1nAI2kAB3rWz4I9nf/TMtu/chC8oAV3ik0GOQgv9K1N1eeUrtLj4jCFSe7mzL91umG9O0DOGbI7MmsbiMz+481e7gqvpE724yFDFr/1rgw126BRQEJEeJ2VFUwOXXBZ+mMVQ/jJTPaqO5A5of3kVbF2ewRwT2lyl5Zl7N6kgriVmvtOfuJlA2yaCz2GfG0EOpg2vUndWqbf/VyPJg+vDiJOKHqdVtLrXFvgFYaD77CldDgpdCugjtZYKLXfwoX/qgN7969UdSONVvG75PrSOBULglCcE2bmcAnSHmo+Qvhc0CjWb9U=
+    - secure: XeHfgEGMLHND/aTY/dUd982F4PBlCg6QscEwlzHBxc8BfoeoxHSniM2Be+sZ78FPa9Bu2BgmDLJWFtuLwXNNQFWMZ27gO6CVhB43wFX1gsAkZzdPZPT0uOpWVcgR3giIH0q1VGyo4PcahiIFH4Wpd6vBYrvvG1CS1sYxfk/7r1j5rsJfw9150Dr5LkIvprWIT8spTDMbnGyEgC+/S60pzAO0Xra9+Nwd9p/W5GFaSLjruMWYsKQYhUroQDt9Nl1NiZ4kFag1yBPLca2a0Z9BZUhlDhhoTSlbXtdlU5uZTd/VP/VmmXXe/ki0Vug7VXTVHuavTL/Zr9NVBjX7eFkbexwrljfpMYXcvjIP8Fyv+lMp+OrKIBC17+JAYID3Hy2ZO3FXdaGh/1wkNUpvE/p/TsHED6n1UExYc0esYrxJqB8nDmoZR4SQNwkd3tXW8Ge9EQtx+7j6s9EhW6Vs6FOKppd0+UDqJhJopsQZyRoBye7mfkdUAx2aPZ+F+CAAS3tL2+RG0d9bP6GMwNy8CA8dbvtgqUiNFWpNH6VZk7A55xD2SbX4r6eriBLMNzQ6qDMS3Xspx/Ljlk10aJazW5yp78stIdyFEVr/0fPRtlaIq16iVyXsIt26amxTyz645PlZ8GsRJ8xgOLwp8BOB6XyRnT4TEEUxotKvUIOnAKWrMCI=
 
 notifications:
   email: false
