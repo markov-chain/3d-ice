@@ -1,19 +1,19 @@
 [package]
 name = "threed-ice"
-version = "0.11.1"
-authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
+version = "0.12.0"
 license = "MIT"
-repository = "https://github.com/markov-chain/3d-ice"
-homepage = "https://github.com/markov-chain/3d-ice"
-documentation = "https://markov-chain.github.io/3d-ice"
+authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides an interface to 3D-ICE."
+documentation = "https://markov-chain.github.io/3d-ice"
+homepage = "https://github.com/markov-chain/3d-ice"
+repository = "https://github.com/markov-chain/3d-ice"
 
 [dependencies]
 matrix = { version = "0.21", default-features = false }
-superlu = "0.2"
-threed-ice-sys = "0.2"
+superlu = "0.3"
+threed-ice-sys = "0.3"
 
 [dev-dependencies]
-assert = "0.6"
-fixture = "0.2"
-temporary = "0.5"
+assert = "0.7"
+fixture = "0.3"
+temporary = "0.6"
